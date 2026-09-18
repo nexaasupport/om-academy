@@ -19,6 +19,18 @@
   transition: transform 0.25s;
 }
 
+// Small tone-colored icon tile, used inline with a line of text (course highlights, "what you'll
+// learn" lists, scheme eligibility). Falls back to the brand tint when no .tone-* class is present.
+.icon-tile-sm {
+  @include flex-center;
+  width: 30px;
+  height: 30px;
+  border-radius: $radius-sm;
+  background: var(--tone-bg, #{$primary-tint});
+  color: var(--tone-fg, #{$primary});
+  flex-shrink: 0;
+}
+
 .card-lift:hover .icon-tile {
   transform: scale(1.08) rotate(-4deg);
 }

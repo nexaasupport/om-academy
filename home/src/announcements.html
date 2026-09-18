@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    @@include('partials/title-meta.html', {"title": "Announcements | OM Academy"})
+
+    @@include('partials/header.html', {"page": "announcements"})
+
+</head>
+
+<body>
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Start Main Wrapper -->
+    <div class="main-wrapper">
+
+        @@include('partials/topbar.html', {"page": "announcements", "sec": "index.html#"})
+
+        <main id="main" tabindex="-1">
+
+            <section class="page-hero">
+                <div class="page-hero-inner">
+                    <nav class="page-breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Announcements</span></nav>
+                    <h1 class="page-hero-title">All Announcements</h1>
+                    <p class="page-hero-lead">Stay updated with the latest news, batches, scholarships and notices from every OM Academy center.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="ann-page-layout">
+                    <div class="ann-wrap">
+                        <div class="ann-toolbar">
+                            <label class="ann-search" for="ann-search">
+                                <span class="sr-only">Search announcements</span>
+                                <svg class="ann-search-icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+                                <input id="ann-search" type="search" placeholder="Search announcements" autocomplete="off">
+                            </label>
+                            <div role="group" aria-label="Filter announcements" class="filter-tabs" data-ann-tabs></div>
+                        </div>
+                        <p class="sr-only" aria-live="polite" data-ann-count></p>
+
+                        <div data-ann-list></div>
+                    </div>
+
+                    <aside class="dates-panel">
+                        <div class="dates-panel-head">
+                            <div class="eyebrow">Stay Informed</div>
+                            <h2 class="dates-panel-title-lg">Important Dates</h2>
+                        </div>
+                        <div data-dates-panel></div>
+                        <a href="important-dates.html" class="btn-pill btn-ghost btn-sm dates-panel-cta">View All Important Dates <svg class="icon-arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- #enquire target: the enquiry form itself is the modal in partials/enquiry-modal.html -->
+            <div id="enquire"></div>
+
+        </main>
+
+        @@include('partials/footer.html', {"sec": "index.html#"})
+
+    </div>
+    <!-- End Main Wrapper -->
+
+    @@include('partials/enquiry-modal.html')
+
+    @@include('partials/script.html', {"page": "announcements"})
+
+</body>
+
+</html>

@@ -222,7 +222,7 @@
   color: $ink-soft;
 }
 
-// Below 1180px the nav becomes an off-canvas drawer that slides in from the right.
+// Below 1280px the nav becomes an off-canvas drawer that slides in from the right.
 // The header drops its backdrop-filter here: a filtered ancestor becomes the containing
 // block for position:fixed children and would trap the drawer inside the header bar.
 @include respond-below(nav) {

@@ -1,0 +1,247 @@
+@use "../../utils/variables" as *;
+@use "../../utils/mixins" as *;
+/*====== Important Dates: homepage/announcements-page preview panel + the full calendar page ======*/
+
+// Compact preview panel (homepage #announcements, top of announcements.html)
+.ann-page-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.dates-panel {
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  background: $white;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-self: start;
+}
+
+.dates-panel-head {
+  margin-bottom: 6px;
+}
+
+.dates-panel-title-lg {
+  @include title-font(700);
+  font-size: 18px;
+  color: $ink;
+  margin: 2px 0 0;
+}
+
+.dates-panel-cta {
+  margin-top: 14px;
+  width: 100%;
+  justify-content: center;
+}
+
+@include respond-below(md) {
+  .ann-page-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.dates-panel-row {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid $border-soft;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+}
+
+.dates-panel-date {
+  flex-shrink: 0;
+  width: 48px;
+  text-align: center;
+  border-radius: $radius-sm;
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+  padding: 6px 4px;
+}
+
+.dates-panel-day {
+  display: block;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1.1;
+}
+
+.dates-panel-month {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.03em;
+}
+
+.dates-panel-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: $ink;
+  margin: 0 0 2px;
+  line-height: 1.35;
+}
+
+.dates-panel-meta {
+  font-size: 12px;
+  color: $ink-soft;
+}
+
+// Full calendar (important-dates.html)
+.dates-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.dates-cal {
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  background: $white;
+  padding: 20px;
+}
+
+.dates-cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.dates-cal-title {
+  @include title-font(700);
+  font-size: 17px;
+  color: $ink;
+}
+
+.dates-cal-nav {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-pill;
+  border: 1px solid $border-strong;
+  background: $white;
+  color: $ink-soft;
+  cursor: pointer;
+
+  &:hover {
+    color: $primary;
+    border-color: $primary;
+  }
+}
+
+.dates-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.dates-cal-dow {
+  margin-bottom: 6px;
+
+  span {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: $ink-soft;
+  }
+}
+
+.dates-cal-cell {
+  position: relative;
+  aspect-ratio: 1;
+  border: none;
+  background: none;
+  border-radius: $radius-sm;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: $ink;
+  cursor: pointer;
+
+  &:hover {
+    background: $surface-alt;
+  }
+
+  &.is-selected {
+    background: $primary-gradient;
+    color: $white;
+  }
+}
+
+.dates-cal-empty {
+  cursor: default;
+  pointer-events: none;
+}
+
+.dates-cal-dot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--tone-fg);
+
+  .is-selected & {
+    background: $white;
+  }
+}
+
+.dates-list-head {
+  @include title-font(700);
+  font-size: 15px;
+  color: $ink;
+  margin: 18px 0 10px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.dates-row {
+  border: 1px solid $border;
+  border-left: 3px solid var(--tone-fg);
+  border-radius: $radius-md;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.dates-row-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dates-row-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: $ink;
+  margin: 0;
+}
+
+.dates-row-desc {
+  font-size: 13px;
+  color: $ink-soft;
+  margin: 6px 0;
+}
+
+.dates-row-meta {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tone-fg);
+}
+
+@include respond-below(md) {
+  .dates-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

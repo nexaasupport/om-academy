@@ -3,12 +3,12 @@
   2. Mixins
 ============================*/
 
-// Breakpoints. nav: the seven nav links + logo need ~1160px, so the header collapses to the drawer below 1180px.
+// Breakpoints. nav: the eight nav links + logo need ~1260px, so the header collapses to the drawer below 1280px.
 $breakpoints: (
   xs: 380px,
   sm: 640px,
   md: 900px,
-  nav: 1180px,
+  nav: 1280px,
 );
 
 @mixin respond-below($breakpoint) {

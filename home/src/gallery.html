@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    @@include('partials/title-meta.html', {"title": "Our Gallery | OM Academy"})
+
+    @@include('partials/header.html', {"page": "gallery"})
+
+</head>
+
+<body>
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Start Main Wrapper -->
+    <div class="main-wrapper">
+
+        @@include('partials/topbar.html', {"page": "gallery", "sec": "index.html#"})
+
+        <main id="main" tabindex="-1">
+
+            <section class="page-hero">
+                <div class="page-hero-inner">
+                    <nav class="page-breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Gallery</span></nav>
+                    <h1 class="page-hero-title">Our Gallery</h1>
+                    <p class="page-hero-lead">Moments of learning, growth and success. Explore activities, events and achievements from OM Academy centers.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="gallery-toolbar">
+                    <div aria-live="polite" class="gallery-count">Showing <strong data-gallery-count></strong></div>
+                    <div role="group" aria-label="Filter photos" class="filter-tabs" data-gallery-tabs></div>
+                </div>
+                <div class="grid-4" data-gallery-grid></div>
+            </section>
+
+            <!-- CTA -->
+            <section class="cta">
+                <div class="cta-card">
+                    <div class="cta-orb cta-orb-1"></div>
+                    <div class="cta-orb cta-orb-2"></div>
+                    <div class="cta-text">
+                        <div class="cta-title">Be a Part of Our Learning Community</div>
+                        <div class="cta-sub">Join 500+ students building their skills and achieving their career goals with OM Academy.</div>
+                    </div>
+                    <a href="index.html#courses" class="btn-pill btn-white cta-btn">Explore Courses <svg class="icon-arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                </div>
+            </section>
+
+            <!-- #enquire target: the enquiry form itself is the modal in partials/enquiry-modal.html -->
+            <div id="enquire"></div>
+
+        </main>
+
+        @@include('partials/footer.html', {"sec": "index.html#"})
+
+    </div>
+    <!-- End Main Wrapper -->
+
+    @@include('partials/enquiry-modal.html')
+
+    @@include('partials/lightbox.html')
+
+    @@include('partials/script.html', {"page": "gallery"})
+
+</body>
+
+</html>

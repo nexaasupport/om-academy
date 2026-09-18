@@ -12,6 +12,11 @@ import {
   tagTones,
   galleryItems,
   galleryFilters,
+  importantDates,
+  importantDateFilters,
+  dateTones,
+  courses,
+  schemes,
 } from "./data.js";
 
 // Helpers
@@ -69,7 +74,11 @@ function initMenu() {
   // a native anchor jump started while body overflow is still hidden gets cancelled.
   qsa(".brand, #site-nav .nav-link").forEach((link) => {
     link.addEventListener("click", (event) => {
-      const id = (link.getAttribute("href") || "").slice(1);
+      const href = link.getAttribute("href") || "";
+      // Only same-page "#id" links are intercepted for a smooth scroll; "other-page.html#id"
+      // links (used from pages other than index.html) get a normal browser navigation.
+      if (!href.startsWith("#")) return;
+      const id = href.slice(1);
       const target = id && document.getElementById(id);
       if (!target) return;
       event.preventDefault();
@@ -301,6 +310,216 @@ function initAnnouncements() {
   render();
 }
 
+// Important Dates preview panel: next few upcoming dates, shown beside Announcements
+// on the homepage and at the top of announcements.html. Full calendar is initImportantDates().
+function initImportantDatesPanel() {
+  const list = qs("[data-dates-panel]");
+  if (!list) return;
+
+  const rowHtml = (d) => {
+    const [day, month, year] = d.date.split(" ");
+    return `
+      <div class="dates-panel-row tone-${dateTones[d.category] || "blue"}">
+        <div class="dates-panel-date">
+          <span class="dates-panel-day">${esc(day)}</span>
+          <span class="dates-panel-month">${esc(month.toUpperCase())}<br>${esc(year)}</span>
+        </div>
+        <div class="dates-panel-body">
+          <h4 class="dates-panel-title">${esc(d.title)}</h4>
+          <div class="dates-panel-meta">${esc(d.date)}${d.time ? ", " + esc(d.time) : ""}</div>
+        </div>
+      </div>`;
+  };
+
+  list.innerHTML = importantDates.slice(0, 4).map(rowHtml).join("");
+}
+
+// Important Dates page: a small vanilla-JS month calendar plus a selected-day / upcoming list.
+function initImportantDates() {
+  const cal = qs("[data-dates-calendar]");
+  const list = qs("[data-dates-list]");
+  const tabs = qs("[data-dates-tabs]");
+  if (!cal || !list) return;
+
+  const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const items = importantDates.map((d) => {
+    const [day, monthAbbr, year] = d.date.split(" ");
+    const month = MONTHS.findIndex((m) => m.startsWith(monthAbbr));
+    return Object.assign({}, d, { day: Number(day), month, year: Number(year), tone: dateTones[d.category] || "blue" });
+  });
+  const inFilter = (d, label) => label === "All Dates" || d.category === label;
+
+  const state = { filter: "All Dates", view: new Date(items[0].year, items[0].month, 1), selected: items[0] };
+
+  function itemsOn(day, month, year) {
+    return items.filter((d) => inFilter(d, state.filter) && d.day === day && d.month === month && d.year === year);
+  }
+
+  function calendarHtml() {
+    const y = state.view.getFullYear();
+    const m = state.view.getMonth();
+    const firstDow = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const cells = [];
+    for (let i = 0; i < firstDow; i++) cells.push("");
+    for (let day = 1; day <= daysInMonth; day++) cells.push(day);
+
+    const dayHtml = (day) => {
+      if (!day) return '<span class="dates-cal-cell dates-cal-empty"></span>';
+      const dayItems = itemsOn(day, m, y);
+      const isSelected = state.selected && state.selected.day === day && state.selected.month === m && state.selected.year === y;
+      const dotTone = dayItems[0] ? dayItems[0].tone : "";
+      return `<button type="button" class="dates-cal-cell${isSelected ? " is-selected" : ""}${dayItems.length ? " has-dot" : ""}" data-day="${day}">
+        ${day}${dayItems.length ? `<span class="dates-cal-dot tone-${dotTone}" aria-hidden="true"></span>` : ""}
+      </button>`;
+    };
+
+    return `
+      <div class="dates-cal-head">
+        <button type="button" class="dates-cal-nav" data-cal-prev aria-label="Previous month">${'<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>'}</button>
+        <div class="dates-cal-title">${MONTHS[m]} ${y}</div>
+        <button type="button" class="dates-cal-nav" data-cal-next aria-label="Next month">${'<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>'}</button>
+      </div>
+      <div class="dates-cal-grid dates-cal-dow">${["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((d) => `<span>${d}</span>`).join("")}</div>
+      <div class="dates-cal-grid">${cells.map(dayHtml).join("")}</div>`;
+  }
+
+  const eventRowHtml = (d) => `
+    <div class="dates-row tone-${d.tone}">
+      <div class="dates-row-top">
+        <h4 class="dates-row-title">${esc(d.title)}</h4>
+        <span class="chip chip-sm tone-${d.tone}">${esc(d.category)}</span>
+      </div>
+      <p class="dates-row-desc">${esc(d.desc)}</p>
+      <div class="dates-row-meta">${esc(d.date)}${d.time ? ", " + esc(d.time) : ""}</div>
+    </div>`;
+
+  function listHtml() {
+    const selectedEvents = state.selected ? itemsOn(state.selected.day, state.selected.month, state.selected.year) : [];
+    const upcoming = items
+      .filter((d) => inFilter(d, state.filter))
+      .filter((d) => new Date(d.year, d.month, d.day) >= new Date(items[0].year, items[0].month, items[0].day))
+      .slice(0, 6);
+
+    return `
+      ${selectedEvents.length ? `
+        <div class="dates-list-head">Events on ${esc(state.selected.date)}</div>
+        ${selectedEvents.map(eventRowHtml).join("")}
+      ` : ""}
+      <div class="dates-list-head">Upcoming Important Dates</div>
+      ${upcoming.map(eventRowHtml).join("") || '<div class="ann-only">No upcoming dates in this view.</div>'}`;
+  }
+
+  function render() {
+    cal.innerHTML = calendarHtml();
+    list.innerHTML = listHtml();
+  }
+
+  if (tabs) {
+    tabs.innerHTML = importantDateFilters
+      .map((label) => tabButton(label, items.filter((d) => inFilter(d, label)).length, label === state.filter))
+      .join("");
+    tabs.addEventListener("click", (event) => {
+      const tab = event.target.closest(".tab");
+      if (!tab) return;
+      state.filter = tab.dataset.filter;
+      setPressed(tabs, state.filter);
+      render();
+    });
+  }
+
+  cal.addEventListener("click", (event) => {
+    const prev = event.target.closest("[data-cal-prev]");
+    const next = event.target.closest("[data-cal-next]");
+    const dayBtn = event.target.closest("[data-day]");
+    if (prev) state.view = new Date(state.view.getFullYear(), state.view.getMonth() - 1, 1);
+    else if (next) state.view = new Date(state.view.getFullYear(), state.view.getMonth() + 1, 1);
+    else if (dayBtn) state.selected = { day: Number(dayBtn.dataset.day), month: state.view.getMonth(), year: state.view.getFullYear(), date: [Number(dayBtn.dataset.day), MONTHS[state.view.getMonth()].slice(0, 3), state.view.getFullYear()].join(" ") };
+    else return;
+    render();
+  });
+
+  render();
+}
+
+// Course details page (course-details.html?course=<slug>): renders the course + a
+// "Related Courses" sidebar of other courses in the same category.
+function initCourseDetails() {
+  const root = qs("[data-course-detail]");
+  if (!root) return;
+
+  const slug = new URLSearchParams(location.search).get("course");
+  const course = courses.find((c) => c.slug === slug) || courses[0];
+  if (!course) return;
+
+  document.title = course.title + " | OM Academy";
+
+  root.innerHTML = `
+    <div class="cd-hero tone-${course.tone}">
+      <span class="chip tone-${course.tone}">${esc(course.category)}</span>
+      <h1 class="cd-title">${esc(course.title)}</h1>
+      <div class="cd-meta">
+        ${course.rating ? `<span class="cd-meta-item">★ ${course.rating} (${course.reviews})</span>` : ""}
+        ${course.hours ? `<span class="cd-meta-item">${course.hours} Hours</span>` : ""}
+        ${course.students ? `<span class="cd-meta-item">${esc(course.students)} Students</span>` : ""}
+      </div>
+    </div>
+    <h2 class="cd-h2">About This Course</h2>
+    <p class="cd-summary">${esc(course.summary)}</p>
+    <div class="cd-highlights">
+      ${course.highlights.map((h) => `<div class="cd-highlight"><span class="icon-tile icon-tile-sm tone-${course.tone}">${'<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'}</span><span>${esc(h)}</span></div>`).join("")}
+    </div>
+    <h2 class="cd-h2">What You Will Learn</h2>
+    <div class="cd-learn-grid">
+      ${course.learn.map((l) => `<div class="cd-learn-item"><span class="icon-tile icon-tile-sm tone-${course.tone}">${'<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'}</span><span>${esc(l)}</span></div>`).join("")}
+    </div>
+    <a href="#enquire" data-enquire="${esc(course.title)}" class="btn-pill btn-primary cd-enquire">Enquire About This Course ${ARROW_14}</a>`;
+
+  const related = qs("[data-related-courses]");
+  if (!related) return;
+  const others = courses.filter((c) => c.slug !== course.slug && c.category === course.category);
+  const pool = (others.length ? others : courses.filter((c) => c.slug !== course.slug)).slice(0, 3);
+  related.innerHTML = pool.map((c) => `
+    <a href="course-details.html?course=${esc(c.slug)}" class="rc-card card-lift tone-${c.tone}">
+      <span class="chip chip-sm tone-${c.tone}">${esc(c.category)}</span>
+      <span class="rc-title">${esc(c.title)}</span>
+      ${c.rating ? `<span class="rc-meta">★ ${c.rating} (${c.reviews}) · ${c.hours ? c.hours + " Hours" : ""} · ${esc(c.students)} Students</span>` : ""}
+      <span class="rc-link">View Course ${ARROW_12}</span>
+    </a>`).join("");
+}
+
+// Scheme details page (scheme-details.html?scheme=<slug>).
+function initSchemeDetails() {
+  const root = qs("[data-scheme-detail]");
+  if (!root) return;
+
+  const slug = new URLSearchParams(location.search).get("scheme");
+  const scheme = schemes.find((s) => s.slug === slug) || schemes[0];
+  if (!scheme) return;
+
+  document.title = scheme.short + " | OM Academy";
+
+  root.innerHTML = `
+    <div class="sd-hero tone-${scheme.tone}">
+      <span class="chip tone-${scheme.tone}">${esc(scheme.tag)}</span>
+      <h1 class="cd-title">${esc(scheme.short)}</h1>
+      <p class="cd-summary">${esc(scheme.name)}</p>
+    </div>
+    <h2 class="cd-h2">About ${esc(scheme.short)}</h2>
+    <p class="cd-summary">${esc(scheme.summary)}</p>
+    <div class="sd-authority"><strong>Authority:</strong> ${esc(scheme.authority)}</div>
+    <div class="cd-highlights">
+      ${scheme.highlights.map((h) => `<div class="cd-highlight"><span class="icon-tile icon-tile-sm tone-${scheme.tone}">${'<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'}</span><span>${esc(h)}</span></div>`).join("")}
+    </div>
+    <h2 class="cd-h2">Who Can Apply?</h2>
+    <ul class="sd-eligibility">${scheme.eligibility.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>
+    <h2 class="cd-h2">Courses Under ${esc(scheme.short)}</h2>
+    <div class="grid-4 sd-courses">
+      ${scheme.courses.map((c) => `<div class="chip tone-${scheme.tone} sd-course-chip">${esc(c)}</div>`).join("")}
+    </div>
+    <a href="#enquire" data-enquire="${esc(scheme.short)}" class="btn-pill btn-primary cd-enquire">Enquire About ${esc(scheme.short)} ${ARROW_14}</a>`;
+}
+
 // Lightbox: pages through the photos that were visible in the gallery when it opened.
 function initLightbox() {
   const box = qs("[data-lightbox]");
@@ -450,6 +669,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const enquiry = initEnquiry(menu);
   const lightbox = initLightbox();
   initAnnouncements();
+  initImportantDatesPanel();
+  initImportantDates();
+  initCourseDetails();
+  initSchemeDetails();
   initGallery(lightbox);
   initWhatsappLinks();
 
