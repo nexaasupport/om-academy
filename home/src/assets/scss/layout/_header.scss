@@ -1,230 +1,542 @@
 @use "../utils/variables" as *;
 @use "../utils/mixins" as *;
 /*============================
-  18. Header & Drawer
+  18. Header, navigation & mobile sheet
 ============================*/
 
+// Contact strip above the header (scrolls away)
+.contact-strip {
+  background: $footer-bg;
+  color: rgb(255 255 255 / 0.86);
+  font-size: 12.5px;
+}
+
+.contact-strip-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: $container-max;
+  margin: 0 auto;
+  padding: 8px $section-pad-x-sm;
+
+  a,
+  .contact-strip-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    @include link-color(rgb(255 255 255 / 0.92));
+  }
+
+  a {
+    transition: color 0.2s;
+
+    &:hover {
+      color: $white;
+    }
+  }
+
+  .contact-strip-note {
+    margin-left: auto;
+  }
+
+  @include respond-below(md) {
+    .contact-strip-note {
+      display: none;
+    }
+  }
+}
+
+// Strip utilities: theme switch + login
+.strip-utils {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 1px solid rgb(255 255 255 / 0.16);
+}
+
+.strip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  padding: 0 10px;
+  border: none;
+  border-radius: $radius-pill;
+  background: transparent;
+  font: inherit;
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.92);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background: rgb(255 255 255 / 0.12);
+    color: $white;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #818cf8;
+    outline-offset: 1px;
+  }
+
+  .icon-moon {
+    display: none;
+  }
+
+  :root[data-theme="dark"] & {
+    .icon-sun {
+      display: none;
+    }
+
+    .icon-moon {
+      display: block;
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .strip-utils {
+    display: none;
+  }
+}
+
+// Sticky header: translucent surface; the hairline + soft shadow fade in once the page scrolls
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: oklch(0.99 0.002 90 / 0.95);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border-bottom: 1px solid $border-strong;
-  box-shadow: 0 8px 24px -18px oklch(0.2 0.03 264 / 0.35);
+  background: var(--header-bg);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+
+  &.is-scrolled {
+    border-bottom-color: $border;
+    box-shadow: $shadow-1;
+  }
 }
 
 .header-inner {
-  max-width: $container-max;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 16px 32px;
-  flex-wrap: wrap;
+  gap: 24px;
+  max-width: $container-max;
+  min-height: 72px;
+  margin: 0 auto;
+  padding: 0 $section-pad-x-sm;
 }
 
 // Brand
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  flex-shrink: 0;
   min-width: 0;
   @include link-color(inherit);
 }
 
-.brand-mark {
-  @include flex-center;
-  @include title-font(700);
-  width: 44px;
+.brand-logo {
+  display: block;
   height: 44px;
-  border-radius: $radius-lg;
-  background: $primary-gradient;
-  color: $white;
-  font-size: 18px;
-  flex-shrink: 0;
+  width: auto;
 }
 
-.brand-text {
-  min-width: 0;
-}
-
-.brand-name {
-  @include title-font(700);
-  font-size: 19px;
-  color: $ink;
-  line-height: 1.1;
-
-  span {
-    color: $primary;
-  }
-}
-
-.brand-tag {
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: $ink-soft;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-// Nav
-.nav-links {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  flex-wrap: wrap;
-  font-weight: 500;
-  font-size: 14.5px;
-  color: $ink;
-}
-
-.nav-link {
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-  padding: 9px 14px;
-  border-radius: $radius-pill;
-  color: $ink;
-  transition: background 0.2s, color 0.2s;
-
-  &:hover {
-    background: $primary-tint;
-    color: $primary;
-  }
-
-  &.active,
-  &.active:hover {
-    background: $primary-tint;
-    color: $primary-dark;
-    font-weight: 600;
-  }
-}
-
-.btn-nav {
-  padding: 11px 22px;
-  font-size: 14.5px;
-}
-
-// Portal login: outlined companion to the Enquire button
-.btn-login {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 10px 18px;
-  border: 1.5px solid $primary;
-  background: transparent;
-  @include link-color($primary);
-
-  &:hover {
-    background: var(--primary-tint);
-  }
-}
-
-// Just above the drawer breakpoint the full nav is tight: Login shrinks to an icon so the row doesn't wrap
-@media (min-width: 1181px) and (max-width: 1300px) {
-  .header-inner {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .nav-links {
-    gap: 3px;
-  }
-
-  .btn-nav {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .btn-login {
-    padding: 10px 12px;
-  }
-
-  .btn-login-text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-}
-
-.hamburger {
+.brand-logo-dark {
   display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  color: $ink;
-  flex-shrink: 0;
+}
 
-  .icon-close {
+:root[data-theme="dark"] {
+  .brand-logo-light {
     display: none;
   }
 
-  &[aria-expanded="true"] {
-    .icon-menu {
-      display: none;
-    }
+  .brand-logo-dark {
+    display: block;
+  }
+}
 
-    .icon-close {
-      display: inline;
+// Desktop navigation
+.nav-links {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.nav-scroll {
+  display: contents;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.drawer-head,
+.drawer-quick,
+.drawer-theme,
+.drawer-note,
+.nav-ico {
+  display: none;
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 12px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: $radius-sm;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: $ink-soft;
+  transition: color 0.2s, background-color 0.2s;
+
+  // Accent underline: slides in on hover, holds on the active link
+  &::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 2px;
+    height: 2px;
+    border-radius: 2px;
+    background: $accent;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s $ease-out;
+  }
+
+  &:hover {
+    color: $ink;
+    background: $surface-alt;
+
+    &::after {
+      transform: scaleX(0.4);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent;
+    outline-offset: 2px;
+  }
+
+  &.active,
+  &[aria-current="page"] {
+    color: $primary;
+    font-weight: 600;
+
+    &::after {
+      transform: scaleX(1);
     }
   }
 }
 
-// Drawer-only parts (shown below the nav breakpoint)
-.nav-backdrop,
-.nav-quick,
-.nav-ico,
-.drawer-head,
-.drawer-spacer,
-.drawer-note {
-  display: none;
+@media (min-width: 1201px) and (max-width: 1380px) {
+  .nav-link {
+    padding: 0 9px;
+    font-size: 14px;
+  }
+
+  .nav-links {
+    gap: 12px;
+  }
 }
 
-.drawer-brand {
+// Sub-navigation (desktop dropdown)
+.has-sub {
+  position: relative;
+}
+
+.nav-row {
+  display: flex;
+  align-items: center;
+}
+
+.sub-toggle {
+  @include flex-center;
+  width: 22px;
+  height: 32px;
+  margin-left: -8px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: $ink-faint;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  svg {
+    transition: transform 0.25s $ease-out;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: $primary;
+  }
+
+  &[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+}
+
+.sub-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 5;
+  min-width: 272px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-3;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.2s, transform 0.25s $ease-out, visibility 0s linear 0.25s;
+
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 10px 12px;
+    border-radius: $radius-sm;
+    font-size: 14px;
+    font-weight: 600;
+    color: $ink;
+    transition: background-color 0.15s;
+
+    small {
+      font-size: 12px;
+      font-weight: 400;
+      color: $ink-soft;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background: $primary-tint;
+      color: $primary;
+      outline: none;
+    }
+  }
+}
+
+.has-sub:hover > .sub-menu,
+.has-sub:focus-within > .sub-menu,
+.has-sub.is-open > .sub-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.2s, transform 0.25s $ease-out;
+}
+
+// Actions
+.nav-actions {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 0;
 }
 
-.drawer-mark {
-  @include flex-center;
-  @include title-font(700);
-  width: 36px;
-  height: 36px;
-  border-radius: 11px;
-  background: $primary-gradient;
-  color: $white;
-  font-size: 14px;
+.btn-nav {
+  height: 44px;
+  padding: 0 22px;
+  font-size: 14.5px;
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
-.drawer-brand-text {
-  min-width: 0;
-}
-
-.drawer-title {
-  @include title-font(700);
-  font-size: 15.5px;
+.btn-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid $border-strong;
   color: $ink;
-  line-height: 1.2;
+  box-shadow: none;
+  @include link-color($ink);
+
+  &:hover {
+    border-color: $primary;
+    background: $primary-tint;
+    color: $primary;
+  }
 }
 
-.drawer-sub {
-  font-size: 12px;
+// Desktop: theme + login live in the top strip so the main row holds only brand, menu and CTA
+@media (min-width: 1201px) {
+  .nav-actions .theme-toggle,
+  .nav-actions .btn-login {
+    display: none;
+  }
+}
+
+// Round theme switch (desktop)
+.theme-toggle {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: $radius-pill;
+  border: 1px solid $border-strong;
+  background: transparent;
   color: $ink-soft;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s, transform 0.3s $ease-out;
+
+  &:hover {
+    color: $primary;
+    border-color: $primary;
+    background: $primary-tint;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent;
+    outline-offset: 2px;
+  }
+
+  .icon-moon {
+    display: none;
+  }
+
+  :root[data-theme="dark"] & {
+    .icon-sun {
+      display: none;
+    }
+
+    .icon-moon {
+      display: block;
+    }
+  }
 }
 
-// Below 1280px the nav becomes an off-canvas drawer that slides in from the right.
-// The header drops its backdrop-filter here: a filtered ancestor becomes the containing
-// block for position:fixed children and would trap the drawer inside the header bar.
+// Toggle switch (mobile menu row)
+.switch {
+  position: relative;
+  width: 46px;
+  height: 26px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: $radius-pill;
+  background: $border-input;
+  cursor: pointer;
+  transition: background-color 0.25s;
+
+  &:focus-visible {
+    outline: 2px solid $accent;
+    outline-offset: 2px;
+  }
+
+  &[aria-checked="true"] {
+    background: $accent;
+  }
+}
+
+.switch-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: $white;
+  box-shadow: 0 1px 3px rgb(11 16 32 / 0.35);
+  transition: transform 0.28s $ease-out;
+
+  .switch[aria-checked="true"] & {
+    transform: translateX(20px);
+  }
+}
+
+// Hamburger (morphs to a cross)
+.hamburger {
+  display: none;
+}
+
+.hb-bars {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 14px;
+
+  span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.3s $ease-out, opacity 0.2s, top 0.3s $ease-out;
+
+    &:nth-child(1) {
+      top: 0;
+    }
+
+    &:nth-child(2) {
+      top: 6px;
+    }
+
+    &:nth-child(3) {
+      top: 12px;
+    }
+  }
+}
+
+.hamburger[aria-expanded="true"] .hb-bars span {
+  &:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  &:nth-child(2) {
+    opacity: 0;
+  }
+
+  &:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+}
+
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: var(--overlay);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: fade-in 0.3s ease both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Mobile / tablet: the nav becomes a full-height sheet sliding in from the right.
+// The header drops its backdrop-filter here: a filtered ancestor becomes the containing block for
+// position:fixed children and would trap the sheet inside the header bar.
+// ---------------------------------------------------------------------------
 @include respond-below(nav) {
   .site-header {
     backdrop-filter: none;
@@ -232,23 +544,26 @@
     background: $page-bg;
   }
 
-  .header-inner {
-    flex-wrap: nowrap;
-  }
-
   .hamburger {
     @include flex-center;
+    position: relative;
     width: 44px;
     height: 44px;
     padding: 0;
-    border-radius: $radius-lg;
-    border: none;
-    background: $primary-tint;
-    color: $primary-dark;
-    transition: background 0.2s;
+    border-radius: $radius;
+    border: 1px solid $border-strong;
+    background: $surface;
+    color: $ink;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
 
     &:hover {
-      background: oklch(0.91 0.05 264);
+      border-color: $primary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $accent;
+      outline-offset: 2px;
     }
   }
 
@@ -258,52 +573,25 @@
     right: 0;
     bottom: 0;
     z-index: 2;
-    width: min(88vw, 360px);
-    display: flex;
+    width: min(92vw, 400px);
+    height: 100dvh;
+    flex: none;
     flex-direction: column;
     align-items: stretch;
-    flex-wrap: nowrap;
-    gap: 4px;
-    padding: 0 16px 20px;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    background: $white;
+    justify-content: flex-start;
+    gap: 0;
+    background: $surface;
+    border-left: 1px solid $border;
     border-radius: 24px 0 0 24px;
-    box-shadow: -24px 0 60px -20px oklch(0.2 0.06 264 / 0.45);
-    transform: translateX(105%);
+    box-shadow: $shadow-3;
+    transform: translateX(104%);
     visibility: hidden;
-    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.32s;
+    transition: transform 0.38s $ease-out, visibility 0s linear 0.38s;
 
     &.open {
       transform: none;
       visibility: visible;
-      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .nav-link {
-      width: 100%;
-      gap: 12px;
-      padding: 9px 10px;
-      border-radius: $radius-lg;
-      font-size: 15.5px;
-      font-weight: 600;
-
-      &::after {
-        content: "";
-        width: 7px;
-        height: 7px;
-        margin-left: auto;
-        border-top: 2px solid currentColor;
-        border-right: 2px solid currentColor;
-        transform: rotate(45deg);
-        opacity: 0.35;
-        flex-shrink: 0;
-      }
-    }
-
-    .btn-pill {
-      width: 100%;
-      justify-content: center;
+      transition: transform 0.38s $ease-out;
     }
   }
 
@@ -312,108 +600,292 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    margin: 0 -16px 8px;
-    padding: 16px 16px 14px;
-    background: $white;
+    padding: 14px 18px;
     border-bottom: 1px solid $border-soft;
+    flex-shrink: 0;
+  }
+
+  .drawer-logo {
+    height: 38px;
+    width: auto;
   }
 
   .drawer-close {
     @include flex-center;
-    width: 40px;
-    height: 40px;
-    border-radius: $radius-md;
+    width: 44px;
+    height: 44px;
+    border-radius: $radius;
     border: 1px solid $border-strong;
-    background: $white;
-    color: $ink;
+    background: transparent;
+    color: $ink-soft;
     cursor: pointer;
-    flex-shrink: 0;
+    transition: color 0.2s, border-color 0.2s, transform 0.3s $ease-out;
+
+    &:hover {
+      color: $primary;
+      border-color: $primary;
+      }
+  }
+
+  .nav-scroll {
+    display: block;
+    flex: 1;
+    min-height: 0;
+    padding: 14px 14px 28px;
+    overflow-y: auto;
+    scroll-padding: 14px;
+    mask-image: linear-gradient(180deg, #000 calc(100% - 22px), transparent);
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 22px), transparent);
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .drawer-quick {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+
+    a {
+      @include flex-center;
+      gap: 8px;
+      min-height: 44px;
+      border-radius: $radius;
+      background: $surface-alt;
+      border: 1px solid $border-soft;
+      font-size: 14px;
+      font-weight: 600;
+      @include link-color($ink);
+      transition: background-color 0.2s, border-color 0.2s;
+
+      &:hover {
+        background: $primary-tint;
+        border-color: transparent;
+      }
+    }
+
+    svg {
+      color: $accent-strong;
+    }
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+
+    > li {
+      opacity: 0;
+      transform: translateX(14px);
+    }
+  }
+
+  // Staggered entrance when the sheet opens
+  .nav-links.open .nav-list > li {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.4s ease, transform 0.45s $ease-out;
+
+    @for $i from 1 through 8 {
+      &:nth-child(#{$i}) {
+        transition-delay: #{0.08 + $i * 0.035}s;
+      }
+    }
+  }
+
+  .nav-list > li > .nav-link {
+    display: flex;
+  }
+
+  @media (max-height: 700px) {
+    .drawer-quick {
+      display: none;
+    }
+
+    .nav-link {
+      min-height: 46px;
+    }
   }
 
   .nav-ico {
     @include flex-center;
-    width: 38px;
-    height: 38px;
-    border-radius: 11px;
-    background: oklch(0.97 0.006 264);
-    color: $primary;
     flex-shrink: 0;
-    transition: background 0.2s, color 0.2s;
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-sm;
+    background: $surface-alt;
+    color: $ink-soft;
+    transition: background-color 0.2s, color 0.2s;
   }
 
-  .nav-link.active .nav-ico {
-    background: $primary-gradient;
-    color: $white;
+  .nav-row {
+    align-items: stretch;
   }
 
-  .drawer-spacer {
-    display: block;
-    flex: 1 0 18px;
+  .nav-link {
+    flex: 1;
+    gap: 14px;
+    width: 100%;
+    min-height: 50px;
+    padding: 6px 12px;
+    border-radius: $radius;
+    font-size: 16px;
+    font-weight: 600;
+    color: $ink;
+
+    &::after {
+      left: 0;
+      right: auto;
+      top: 50%;
+      bottom: auto;
+      width: 3px;
+      height: 0;
+      border-radius: 0 3px 3px 0;
+      transform: translateY(-50%);
+      transition: height 0.3s $ease-out;
+    }
+
+    &:hover {
+      background: $surface-alt;
+
+      &::after {
+        height: 30%;
+        transform: translateY(-50%);
+      }
+    }
+
+    &.active,
+    &[aria-current="page"] {
+      background: $primary-tint;
+      color: $primary;
+
+      &::after {
+        height: 62%;
+        transform: translateY(-50%);
+      }
+
+      .nav-ico {
+        background: $primary-fill;
+        color: $on-primary;
+      }
+    }
   }
 
-  .nav-quick {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 10px;
+  .sub-toggle {
+    width: 48px;
+    height: auto;
+    margin: 0;
+    border-radius: $radius;
+  }
+
+  // Accordion sub-navigation (height animates via max-height; lists are short)
+  .sub-menu {
+    position: static;
+    min-width: 0;
+    max-height: 0;
+    padding: 0 0 0 26px;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    overflow: hidden;
+    transition: max-height 0.4s $ease-out, padding 0.4s $ease-out;
 
     a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 11px;
-      border-radius: $radius-md;
-      background: oklch(0.97 0.004 90);
-      border: 1px solid $border;
-      @include link-color($ink);
-      font-size: 14px;
-      font-weight: 600;
+      padding: 12px 14px;
+      border-left: 1px solid $border;
+      border-radius: 0 $radius-sm $radius-sm 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: $ink-soft;
+
+      small {
+        display: none;
+      }
     }
+  }
+
+  .has-sub:hover > .sub-menu,
+  .has-sub:focus-within > .sub-menu {
+    max-height: 0;
+    opacity: 1;
+    transform: none;
+  }
+
+  .has-sub.is-open > .sub-menu {
+    max-height: 520px;
+    padding-top: 2px;
+    padding-bottom: 8px;
+  }
+
+  .drawer-theme {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: $radius;
+    background: $surface-alt;
+    border: 1px solid $border-soft;
+  }
+
+  .drawer-theme-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: $ink;
   }
 
   .drawer-note {
     display: block;
-    margin: 14px 4px 0;
+    margin: 12px 4px 0;
     font-size: 12.5px;
     line-height: 1.5;
-    color: $ink-soft;
-    text-align: center;
+    color: $ink-faint;
   }
 
-  // Inside the header so it also dims the header bar (stacks below the drawer: z-index 1 vs 2)
-  .nav-backdrop {
-    display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    background: oklch(0.15 0.03 264 / 0.45);
-    animation: fadeIn 0.25s ease-out;
-  }
-}
+  // Sticky action bar
+  .nav-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 10px;
+    flex-shrink: 0;
+    padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+    border-top: 1px solid $border-soft;
+    background: $surface;
 
-@include respond-below(sm) {
-  .header-inner {
-    padding: 10px $section-pad-x-sm;
+    .theme-toggle {
+      display: none;
+    }
+
+    .btn-nav {
+      justify-content: center;
+      min-height: 48px;
+    }
+  }
+
+  .brand-logo {
+    height: 40px;
   }
 }
 
 @include respond-below(xs) {
-  .brand-mark {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+  .brand-logo {
+    height: 34px;
   }
+}
 
-  .brand-name {
-    font-size: 17px;
-  }
-
-  .brand-tag {
-    font-size: 9.5px;
-    letter-spacing: 0.08em;
+// Reduced motion: the sheet still opens, without staggering or morphing
+@media (prefers-reduced-motion: reduce) {
+  .nav-links,
+  .nav-list > li,
+  .hb-bars span {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
   }
 }

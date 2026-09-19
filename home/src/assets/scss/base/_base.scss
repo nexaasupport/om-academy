@@ -18,8 +18,29 @@ body {
   margin: 0;
   background: $page-bg;
   font-family: $font-family-primary;
+  font-size: 16px;
+  line-height: 1.6;
   color: $ink;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: $font-family-title;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: rgb(99 102 241 / 0.3);
 }
 
 a {
@@ -41,11 +62,29 @@ h1 {
 
 // Page wrapper. overflow-x:clip (not hidden) so the sticky header keeps working.
 .main-wrapper {
-  max-width: $container-max;
-  margin: 0 auto;
   overflow-x: clip;
 }
 
 main {
   outline: none;
+}
+
+// Smooth theme switch (skipped for reduced motion)
+@media (prefers-reduced-motion: no-preference) {
+  body,
+  .site-header,
+  .card-lift,
+  .course-card,
+  .section-alt,
+  .enq-form-panel,
+  input,
+  select,
+  textarea {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+// Photos sit a touch lower in dark mode so they do not glare against dark surfaces
+img:not(.brand-logo):not(.footer-logo):not(.drawer-logo):not(.enq-brand-logo) {
+  filter: var(--img-filter);
 }

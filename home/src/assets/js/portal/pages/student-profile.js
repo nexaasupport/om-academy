@@ -113,10 +113,7 @@ function renderLayout() {
             <section>
               <h2 class="card-title">Appearance</h2>
               <p class="card-subtitle section-gap">Choose how the portal looks on this device and in your account.</p>
-              <div class="theme-options" role="radiogroup" aria-label="Theme" data-theme-options>
-                <button type="button" class="theme-option" role="radio" data-theme-pick="light"><span class="icon-tile icon-tile-sm tone-amber">${raw(icon("Sun", { size: 16 }))}</span><span><span class="theme-option-name">Light</span><span class="theme-option-hint">Bright surfaces, best in daylight</span></span></button>
-                <button type="button" class="theme-option" role="radio" data-theme-pick="dark"><span class="icon-tile icon-tile-sm tone-navy">${raw(icon("Moon", { size: 16 }))}</span><span><span class="theme-option-name">Dark</span><span class="theme-option-hint">Easier on the eyes at night</span></span></button>
-              </div>
+              <label class="theme-switch"><span class="theme-switch-text"><span class="theme-option-name">Dark mode</span><span class="theme-option-hint">Easier on the eyes at night</span></span><input type="checkbox" class="toggle" data-theme-switch aria-label="Dark mode"></label>
             </section>
             <section>
               <h2 class="card-title">Notifications</h2>
@@ -208,9 +205,8 @@ function refresh() {
 
 function paintTheme() {
   const t = currentTheme();
-  qsa("[data-theme-pick]", ctx.root).forEach((b) => {
-    b.setAttribute("aria-checked", String(b.dataset.themePick === t));
-    b.classList.toggle("is-active", b.dataset.themePick === t);
+  qsa("[data-theme-switch]", ctx.root).forEach((b) => {
+    b.checked = t === "dark";
   });
 }
 
@@ -295,8 +291,8 @@ function setTheme(theme) {
 function wire() {
   on(ctx.root, "click", '[data-act="edit"]', editDetails);
   on(ctx.root, "change", "[data-photo]", (e, input) => uploadPhoto(input));
-  on(ctx.root, "click", "[data-theme-pick]", (e, btn) => {
-    if (btn.dataset.themePick !== currentTheme() || me().prefs?.theme !== btn.dataset.themePick) setTheme(btn.dataset.themePick);
+  on(ctx.root, "change", "[data-theme-switch]", (e, input) => {
+    setTheme(input.checked ? "dark" : "light");
   });
   on(ctx.root, "change", "[data-pref]", (e, input) => {
     const u = me();

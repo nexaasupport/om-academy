@@ -29,7 +29,7 @@
   gap: 24px;
   padding-bottom: 14px;
   margin-bottom: 18px;
-  border-bottom: 2px solid #23459d;
+  border-bottom: 2px solid #4f46e5;
 }
 
 .print-brand {
@@ -41,20 +41,13 @@
 .print-mark {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
-  background: #23459d;
-  color: #fff;
-  font: 700 17px var(--font-title);
-  display: grid;
-  place-items: center;
+  object-fit: contain;
   flex-shrink: 0;
-  print-color-adjust: exact;
-  -webkit-print-color-adjust: exact;
 }
 
 .print-org {
   font: 700 18px var(--font-title);
-  color: #23459d;
+  color: #4f46e5;
 }
 
 .print-org-sub {

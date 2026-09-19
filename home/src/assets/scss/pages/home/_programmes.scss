@@ -1,0 +1,300 @@
+@use "../../utils/variables" as *;
+@use "../../utils/mixins" as *;
+/*====== Programme cards, stats row, job-role tiles (homepage) ======*/
+
+.scheme-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid $border;
+  border-top: 3px solid var(--tone-fg);
+  border-radius: $radius-lg;
+  background: $surface;
+}
+
+.scheme-media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--tone-bg);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+}
+
+.scheme-card:hover .scheme-media img {
+  transform: scale(1.03);
+}
+
+.scheme-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+
+  .badge {
+    align-self: flex-start;
+  }
+}
+
+.scheme-short {
+  @include title-font(800);
+  font-size: 22px;
+  color: var(--tone-fg);
+  line-height: 1.1;
+}
+
+.scheme-authority {
+  font-size: 13px;
+  line-height: 1.45;
+  color: $ink-soft;
+}
+
+.scheme-points {
+  list-style: none;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 8px;
+  padding: 0;
+  font-size: 13.5px;
+  color: $ink;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .icon {
+    margin-top: 2px;
+    color: var(--tone-fg);
+  }
+}
+
+.scheme-cta {
+  align-self: flex-start;
+}
+
+// Stats strip above the "Why OM Academy" cards
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto 32px;
+  padding: 22px 12px;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  background: $surface;
+  text-align: center;
+}
+
+.stat-n {
+  @include title-font(800);
+  font-size: clamp(18px, 2.2vw, 26px);
+  color: $primary;
+}
+
+.stat-l {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: $ink-soft;
+}
+
+// Popular job roles: bento grid, photo tiles with a scrim, icon chip and reveal arrow
+.role-bento {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 190px;
+  gap: 16px;
+}
+
+.role-tile {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border-radius: $radius-xl;
+  border: 1px solid $border;
+  background: $surface-soft;
+  color: $white;
+  isolation: isolate;
+  transition: transform 0.35s $ease-out, box-shadow 0.35s;
+
+  img {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s $ease-out;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-2;
+    color: $white;
+
+    img {
+      transform: scale(1.03);
+    }
+
+    .role-go {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent;
+    outline-offset: 3px;
+  }
+}
+
+.role-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgb(8 5 20 / 0.05) 20%, rgb(8 5 20 / 0.82) 100%);
+}
+
+.role-icon {
+  @include flex-center;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: $radius;
+  background: rgb(255 255 255 / 0.16);
+  border: 1px solid rgb(255 255 255 / 0.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.role-content {
+  display: grid;
+  gap: 4px;
+  padding: 18px 60px 18px 18px;
+}
+
+.role-title {
+  font: 700 clamp(16px, 1.6vw, 19px) $font-family-title;
+  line-height: 1.25;
+  color: $white;
+}
+
+.role-blurb {
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgb(255 255 255 / 0.86);
+}
+
+.role-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+
+  span {
+    padding: 3px 10px;
+    border-radius: $radius-pill;
+    background: rgb(255 255 255 / 0.16);
+    border: 1px solid rgb(255 255 255 / 0.22);
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+}
+
+.role-go {
+  @include flex-center;
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: $primary-fill;
+  color: $on-primary;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.3s, transform 0.35s $ease-out;
+}
+
+// Bento placement: a featured 2x2 tile, then a mix of 1-wide and 2-wide tiles
+.role-tile-1 {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.role-tile-4 {
+  grid-column: span 2;
+}
+
+.role-tile-5 {
+  grid-column: span 2;
+}
+
+.role-tile-6 {
+  grid-column: span 2;
+}
+
+@include respond-below(md) {
+  .role-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 180px;
+  }
+
+  .role-tile-1 {
+    grid-column: 1 / -1;
+    grid-row: span 2;
+  }
+
+  .role-tile-4,
+  .role-tile-5,
+  .role-tile-6 {
+    grid-column: auto;
+  }
+
+  .role-go {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@include respond-below(sm) {
+  .role-bento {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: 170px;
+  }
+
+  .role-tile-1 {
+    grid-row: span 2;
+  }
+}
+
+// Contact strip above the header
+@include respond-below(md) {
+  .grid-6 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stat-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include respond-below(sm) {
+  .grid-6 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}

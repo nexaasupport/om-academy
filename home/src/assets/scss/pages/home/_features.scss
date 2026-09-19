@@ -6,8 +6,8 @@
   text-align: left;
   padding: 22px 18px;
   border-radius: $radius-lg;
-  border: 1px solid oklch(0.91 0.006 264);
-  background: $white;
+  border: 1px solid $border;
+  background: $surface;
   min-width: 0;
 }
 
@@ -15,8 +15,8 @@
   width: 46px;
   height: 46px;
   border-radius: $radius-md;
-  background: $primary-gradient;
-  color: $white;
+  background: $primary-fill;
+  color: $on-primary;
   margin-bottom: 14px;
 }
 

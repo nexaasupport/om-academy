@@ -113,9 +113,9 @@
   overflow-wrap: anywhere;
 
   .is-mine & {
-    background: var(--primary);
+    background: var(--primary-fill);
     border-color: var(--primary);
-    color: #fff;
+    color: var(--primary-contrast);
     border-radius: 14px 14px 4px 14px;
   }
 }

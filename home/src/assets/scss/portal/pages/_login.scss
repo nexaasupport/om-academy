@@ -8,8 +8,8 @@
   background: var(--surface-alt);
 }
 
-// Brand primary (#23459d) — fixed, not the theme's --primary, so the panel looks the same in dark mode
-$login-primary: oklch(0.42 0.15 265);
+// Brand primary (#4f46e5) — fixed, not the theme's --primary, so the panel looks the same in dark mode
+$login-primary: #4f46e5;
 
 .login-aside {
   position: relative;
@@ -28,8 +28,6 @@ $login-primary: oklch(0.42 0.15 265);
     position: absolute;
     inset: 0;
     z-index: 1;
-    background-image: radial-gradient(rgb(255 255 255 / 0.07) 1.5px, transparent 1.5px);
-    background-size: 22px 22px;
     pointer-events: none;
   }
 }
@@ -47,14 +45,12 @@ $login-primary: oklch(0.42 0.15 265);
     color: #fff;
   }
 
-  .brand-mark {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    font-size: 16px;
-    background: rgb(255 255 255 / 0.16);
-    border: 1px solid rgb(255 255 255 / 0.3);
-  }
+}
+
+.login-brand-logo {
+  display: block;
+  height: 56px;
+  width: auto;
 }
 
 .login-brand-name {

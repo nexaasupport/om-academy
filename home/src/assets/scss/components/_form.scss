@@ -20,11 +20,11 @@ textarea {
   padding: 11px 13px;
   border-radius: $radius-sm;
   border: 1px solid $border-input;
-  background: $white;
+  background: $surface;
   color: $ink;
 
   &:focus {
-    outline: 2px solid oklch(0.42 0.15 265 / 0.4);
+    outline: 2px solid rgb(79 70 229 / 0.4);
   }
 }
 

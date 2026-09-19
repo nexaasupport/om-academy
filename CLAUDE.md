@@ -160,6 +160,14 @@ There is no backend. Submitting the enquiry form builds a text message and opens
 
 Use the Browser pane with `om-academy-home`. HMR updates CSS and JS in place and reloads on any `.html` change. To check the production bundle, run `npm run build` and then use `om-academy-dist`. There is no test suite; verify at 375px, 768px and 1280px widths.
 
+## Theming, icons and extra pages
+
+- **Colour system (site + portal, one palette):** Primary `#4F46E5`, Primary Dark `#3730A3`, Accent `#8B5CF6`, Deep Navy `#0B1020`, Background `#F8FAFC`, Surface `#FFFFFF`, Text `#111827`, Secondary text `#64748B`, Border `#E2E8F0`, Success `#10B981`, Warning `#F59E0B`, Error `#EF4444`. Dark: bg `#080D1A`, surface `#0F172A`, elevated `#151E32`, border `#25304A`, primary `#6366F1` (fills use `#5F62EE` so white text passes 4.5:1), accent `#A78BFA`. All of it lives in `scss/utils/_variables.scss` (site) and `scss/portal/base/_tokens.scss` (portal, same values); do not add literals in components. `$primary` = text/icon colour, `$primary-fill` = button/active fill, `$on-primary` = text on a fill, `$brand-band` = deep brand gradient for bands. `.tone-*` decorative colours resolve to the indigo family; only success/warning/error keep their hue.
+- **Dark mode (public site):** all colours are CSS custom properties (`:root` light, `:root[data-theme="dark"]` dark). Use `$surface` for card backgrounds and `$white` only for text on brand/photo bands. `partials/header.html` applies the saved/system theme before paint; `initTheme()` in `script.js` powers the header switch and shares the portal key `om-portal:theme`.
+- **Icons:** `assets/js/icons.js` is the single icon set (24px grid, 1.75 stroke) for JS-rendered markup; keep new inline SVGs at the same stroke.
+- **Extra pages:** `announcements`, `gallery`, `important-dates`, `schemes`, `scheme-details?scheme=`, `course-details?course=`. Data lives in `data.js` (`schemes`, `courses`, `jobRoles`, `importantDates`). Section links in `topbar.html`/`footer.html` use the `@@sec` prefix (`#` on index, `index.html#` elsewhere); pass `{"page": "…", "sec": "…"}` when including them. The drawer breakpoint is 1280px (eight nav links).
+- **Unverified content:** scheme details, batches and eligibility, course ratings, "Since 2006 / 18+ years", Unsplash stock photos, and partner logos (icons stand in for the official NIELIT/HARTRON/HKCL/UGC/Skill India/Digital India logos).
+
 ## Encoding
 
 Keep files UTF-8 without BOM. Don't round-trip them through PowerShell `Set-Content`/`Out-File`; that previously produced `Â·`/`âœ“` mojibake.

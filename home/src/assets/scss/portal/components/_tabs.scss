@@ -87,8 +87,8 @@
 
     &[aria-selected="true"],
     &.is-active {
-      background: var(--primary);
-      color: #fff;
+      background: var(--primary-fill);
+      color: var(--primary-contrast);
     }
   }
 }

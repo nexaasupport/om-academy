@@ -1,3 +1,14 @@
+<!-- Theme: apply the saved (or system) theme before first paint so there is no flash -->
+<meta name="color-scheme" content="light dark">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem("om-portal:theme"); } catch (e) {}
+  if (t !== "light" && t !== "dark") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

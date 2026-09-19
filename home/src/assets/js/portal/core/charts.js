@@ -7,16 +7,16 @@ Description  : ApexCharts wrappers. ApexCharts can't read oklch()/var() colours,
 
 const PALETTES = {
   light: {
-    primary: "#23459d", primaryDark: "#1a3475", accent: "#1f9d55", gold: "#b3781b",
-    success: "#1f9d55", warning: "#b3781b", danger: "#c23a3a", info: "#2c6fbb", slate: "#64748b",
-    grid: "#e8e9ec", text: "#67707d", title: "#2f3a4b",
-    series: ["#23459d", "#1f9d55", "#b3781b", "#7a4fc9", "#2c6fbb", "#c23a3a"],
+    primary: "#4f46e5", primaryDark: "#3730a3", accent: "#6366f1", gold: "#f59e0b",
+    success: "#10b981", warning: "#f59e0b", danger: "#ef4444", info: "#4f46e5", slate: "#64748b",
+    grid: "#e2e8f0", text: "#64748b", title: "#111827",
+    series: ["#4f46e5", "#6366f1", "#10b981", "#f59e0b", "#6366f1", "#ef4444"],
   },
   dark: {
-    primary: "#5b7fd4", primaryDark: "#3a5bb0", accent: "#3ecb77", gold: "#d9a441",
-    success: "#3ecb77", warning: "#d9a441", danger: "#e0685f", info: "#5b9be0", slate: "#94a3b8",
-    grid: "#2a2f3a", text: "#aab3c2", title: "#e4e8f0",
-    series: ["#5b7fd4", "#3ecb77", "#d9a441", "#a586e8", "#5b9be0", "#e0685f"],
+    primary: "#6366f1", primaryDark: "#4f46e5", accent: "#818cf8", gold: "#fbbf24",
+    success: "#34d399", warning: "#fbbf24", danger: "#f87171", info: "#818cf8", slate: "#94a3b8",
+    grid: "#25304a", text: "#94a3b8", title: "#f8fafc",
+    series: ["#818cf8", "#818cf8", "#34d399", "#fbbf24", "#6366f1", "#f87171"],
   },
 };
 
@@ -125,7 +125,7 @@ export function donutChart(el, { series, labels, height = 240, colors, centerLab
     series,
     labels,
     colors: colors || p.series,
-    stroke: { width: 2, colors: [currentTheme() === "dark" ? "#1a1e22" : "#ffffff"] },
+    stroke: { width: 2, colors: [currentTheme() === "dark" ? "#0f172a" : "#ffffff"] },
     plotOptions: { pie: { donut: { size: "68%", labels: { show: !!centerLabel, total: { show: true, label: centerLabel || "Total", color: p.text }, value: { color: p.title, fontWeight: 700 } } } } },
     legend: { position: "bottom" },
   }));

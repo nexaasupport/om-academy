@@ -13,12 +13,23 @@
 .dates-panel {
   border: 1px solid $border;
   border-radius: $radius-lg;
-  background: $white;
+  background: $surface;
   padding: 22px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   align-self: start;
+}
+
+.section-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.scheme-detail-wrap {
+  max-width: 860px;
+  margin: 0 auto;
 }
 
 .dates-panel-head {
@@ -104,7 +115,7 @@
 .dates-cal {
   border: 1px solid $border;
   border-radius: $radius-lg;
-  background: $white;
+  background: $surface;
   padding: 20px;
 }
 
@@ -127,7 +138,7 @@
   height: 32px;
   border-radius: $radius-pill;
   border: 1px solid $border-strong;
-  background: $white;
+  background: $surface;
   color: $ink-soft;
   cursor: pointer;
 
@@ -170,8 +181,8 @@
   }
 
   &.is-selected {
-    background: $primary-gradient;
-    color: $white;
+    background: $primary-fill;
+    color: $on-primary;
   }
 }
 
@@ -243,5 +254,31 @@
 @include respond-below(md) {
   .dates-layout {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.dates-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: $ink-soft;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    &::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--tone-fg);
+    }
   }
 }

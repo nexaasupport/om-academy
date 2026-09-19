@@ -13,7 +13,7 @@
 }
 
 .testimonial-card {
-  background: $white;
+  background: $surface;
   border: 1px solid $border;
   border-radius: $radius-lg;
   padding: 26px;
@@ -21,7 +21,7 @@
 }
 
 .stars {
-  color: oklch(0.5 0.16 40);
+  color: $gold;
   font-size: 15px;
   margin-bottom: 14px;
   letter-spacing: 2px;
@@ -46,8 +46,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: $primary-gradient;
-  color: $white;
+  background: $primary-fill;
+  color: $on-primary;
   font-size: 13px;
 }
 

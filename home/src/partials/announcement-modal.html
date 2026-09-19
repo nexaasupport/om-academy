@@ -1,0 +1,27 @@
+<!-- Start Announcement popup: opened by [data-ann-open]; data-auto shows the newest announcement once -->
+<div class="pop-overlay" role="dialog" aria-modal="true" aria-labelledby="pop-title" hidden data-ann-modal@@if(auto=='yes'){ data-auto}>
+    <div class="pop">
+        <button type="button" class="pop-close" aria-label="Close announcement" data-pop-close>
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+        <div class="pop-media" data-pop-media hidden>
+            <img data-pop-img src="" alt="" width="900" height="500" loading="lazy">
+        </div>
+        <div class="pop-body">
+            <div class="pop-head">
+                <span class="pop-icon" data-pop-icon></span>
+                <div class="pop-meta">
+                    <span class="pop-tag" data-pop-tag></span>
+                    <span class="pop-time" data-pop-time></span>
+                </div>
+            </div>
+            <h2 class="pop-title" id="pop-title" data-pop-title></h2>
+            <p class="pop-text" data-pop-body></p>
+            <div class="pop-actions">
+                <a href="#enquire" data-enquire-topic="" class="btn-pill btn-primary" data-pop-cta>Ask about this <svg class="icon-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></a>
+                <a href="announcements.html" class="btn-pill btn-ghost" data-pop-all>View all announcements</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Announcement popup -->

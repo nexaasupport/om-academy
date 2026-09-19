@@ -5,173 +5,223 @@
 ============================*/
 
 .site-footer {
-  padding: 64px $section-pad-x 32px;
-  background: $footer-bg;
-  color: oklch(0.75 0.01 264);
+  position: relative;
+  margin-top: 48px;
+  padding-bottom: 8px;
+  color: rgb(255 255 255 / 0.72);
+  background:
+    radial-gradient(ellipse 60% 50% at 85% 0%, rgb(79 70 229 / 0.06), transparent 70%),
+    linear-gradient(180deg, #111634, var(--navy));
+  border-top: 1px solid rgb(255 255 255 / 0.06);
 }
 
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.3fr 0.8fr 1fr 1.3fr;
-  gap: 32px;
-  margin-bottom: 40px;
+// CTA card overlaps the top edge of the footer
+.footer-cta {
+  padding: 0 $section-pad-x;
+  transform: translateY(-50%);
+  margin-bottom: -24px;
 }
 
-.footer-about {
-  min-width: 0;
-}
-
-.footer-brand {
+.footer-cta-card {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
+  justify-content: space-between;
+  gap: 28px;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 36px) clamp(24px, 4vw, 44px);
+  border-radius: $radius-xl;
+  background:
+    radial-gradient(circle at 92% 0%, rgb(99 102 241 / 0.14), transparent 50%),
+    linear-gradient(135deg, var(--brand-mid), var(--brand-deep));
+  border: 1px solid rgb(255 255 255 / 0.14);
+  box-shadow: $shadow-3;
+  color: $white;
 }
 
-.footer-mark {
-  @include flex-center;
-  @include title-font(700);
-  width: 38px;
-  height: 38px;
-  border-radius: $radius-md;
-  background: $primary-gradient;
-  color: $white;
+.footer-cta-title {
+  font: 700 clamp(20px, 2.6vw, 28px) $font-family-title;
+  letter-spacing: -0.02em;
+}
+
+.footer-cta-text {
+  max-width: 52ch;
+  margin: 8px 0 0;
   font-size: 15px;
+  color: rgb(255 255 255 / 0.92);
 }
 
-.footer-name {
-  @include title-font(700);
-  font-size: 16px;
-  color: $white;
+.footer-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 56px);
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 24px $section-pad-x-sm 48px;
+  box-sizing: content-box;
+}
+
+.footer-logo {
+  display: block;
+  height: 50px;
+  width: auto;
 }
 
 .footer-text {
-  font-size: 13.5px;
-  color: oklch(0.65 0.01 264);
-  line-height: 1.6;
-  max-width: 260px;
-  margin: 0 0 20px;
+  max-width: 38ch;
+  margin: 18px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgb(255 255 255 / 0.64);
 }
 
-.footer-cta {
-  background: oklch(0.28 0.07 265);
-  @include link-color($white);
-  padding: 10px 20px;
-  font-size: 13px;
-  border: 1px solid oklch(0.36 0.07 265);
+.footer-contact {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+  font-size: 13.5px;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #818cf8;
+  }
+
+  a {
+    @include link-color(rgb(255 255 255 / 0.86));
+  }
+}
+
+.footer-social {
+  display: flex;
+  gap: 8px;
+
+  a {
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    background: rgb(255 255 255 / 0.05);
+    color: rgb(255 255 255 / 0.86);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.25s $ease-out;
+
+    &:hover {
+      background: #818cf8;
+      border-color: transparent;
+      color: #0b1020;
+    }
+  }
 }
 
 .footer-col {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  font-size: 13.5px;
+  align-items: flex-start;
+  gap: 4px;
 
   a {
-    @include link-color(oklch(0.75 0.01 264));
+    position: relative;
+    padding: 5px 0;
+    font-size: 14px;
+    @include link-color(rgb(255 255 255 / 0.72));
+    transition: color 0.2s, transform 0.25s $ease-out;
+
+    &:hover {
+      color: $white;
+      transform: translateX(2px);
+    }
   }
 }
 
 .footer-heading {
-  font-weight: 700;
-  font-size: 14px;
-  margin-bottom: 2px;
-  color: $white;
-}
-
-.footer-contact {
-  min-width: 0;
-  border: 1px solid oklch(0.34 0.07 265);
-  border-radius: $radius-lg;
-  padding: 20px 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.footer-contact-item {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.footer-contact-item-top {
-  align-items: flex-start;
-}
-
-.footer-contact-icon {
-  @include flex-center;
-  width: 32px;
-  height: 32px;
-  border-radius: $radius-sm;
-  background: oklch(0.28 0.07 265);
-  color: oklch(0.78 0.12 264);
-  flex-shrink: 0;
-}
-
-.footer-contact-label {
-  font-weight: 700;
-  font-size: 13px;
-  color: $white;
-  margin-bottom: 2px;
-}
-
-.footer-contact-value {
-  font-size: 12.5px;
-  color: oklch(0.65 0.01 264);
-  line-height: 1.5;
-}
-
-.footer-contact-link {
-  font-size: 12.5px;
-  @include link-color(oklch(0.8 0.01 264));
+  margin-bottom: 10px;
+  font: 700 12px $font-family-primary;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #818cf8;
 }
 
 .footer-bottom {
-  border-top: 1px solid oklch(0.3 0.06 265);
-  padding-top: 20px;
-  font-size: 12.5px;
-  color: oklch(0.65 0.01 264);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px 20px;
   flex-wrap: wrap;
+  gap: 12px 24px;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 20px $section-pad-x-sm;
+  box-sizing: content-box;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+  font-size: 13px;
+  color: rgb(255 255 255 / 0.64);
 
   a {
-    @include link-color(oklch(0.75 0.01 264));
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    @include link-color(rgb(255 255 255 / 0.72));
+
+    &:hover {
+      color: $white;
+    }
   }
 }
 
+.footer-legal {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 @include respond-below(md) {
-  .footer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .footer-main {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .footer-about {
+    grid-column: 1 / -1;
+  }
+
+  .footer-cta-card {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
 @include respond-below(sm) {
-  .site-footer {
-    padding-left: $section-pad-x-sm;
-    padding-right: $section-pad-x-sm;
+  .footer-main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .footer-grid {
-    gap: 28px 20px;
-
-    > :first-child,
-    > :last-child {
-      grid-column: 1 / -1;
-    }
-
-    a:not(.btn-pill) {
-      padding: 9px 0;
-    }
+  .footer-col:last-child {
+    grid-column: 1 / -1;
   }
 
-  .footer-col {
-    gap: 2px;
+  .footer-cta-actions .btn-pill {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

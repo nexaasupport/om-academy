@@ -34,19 +34,19 @@ button.btn-pill {
 
 .btn-primary {
   background: $primary-gradient;
-  color: $white;
+  color: $on-primary;
   box-shadow: $shadow-primary;
 
   &:hover {
-    color: $white;
+    color: $on-primary;
     background: $primary-dark;
   }
 }
 
 .btn-ghost {
-  background: $white;
+  background: $surface;
   color: $ink;
-  border: 1.5px solid oklch(0.88 0.01 264);
+  border: 1.5px solid $border-strong;
 
   &:hover {
     color: $ink;
@@ -56,13 +56,13 @@ button.btn-pill {
 
 // White pill on a brand background (CTA card, pinned notice)
 .btn-white {
-  background: $white;
+  background: $surface;
   @include link-color($primary);
 }
 
 // Outline pill on the hero photo
 .btn-outline-light {
-  border: 1.5px solid oklch(0.95 0.01 260 / 0.5);
+  border: 1.5px solid rgb(255 255 255 / 0.5);
   @include link-color($white);
 }
 

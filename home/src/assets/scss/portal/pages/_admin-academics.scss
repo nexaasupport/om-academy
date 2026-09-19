@@ -131,7 +131,7 @@ body[data-page="admin-academics"] {
     &[aria-checked="true"][data-att-mark="P"] { background: var(--success); }
     &[aria-checked="true"][data-att-mark="A"] { background: var(--danger); }
     &[aria-checked="true"][data-att-mark="L"] { background: var(--warning); }
-    &[aria-checked="true"][data-att-mark="E"] { background: color-mix(in oklch, var(--primary) 40%, oklch(0.55 0.17 300)); }
+    &[aria-checked="true"][data-att-mark="E"] { background: color-mix(in oklch, var(--primary) 40%, #6366f1); }
   }
 }
 

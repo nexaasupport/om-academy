@@ -1,0 +1,403 @@
+@use "../utils/variables" as *;
+@use "../utils/mixins" as *;
+/*============================
+  Design system layer: surfaces, type, buttons, motion
+  Loaded after the component partials so the whole site shares one language.
+============================*/
+
+// ---- Page + focus -----------------------------------------------------------------------------
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  main {
+    animation: page-in 0.55s $ease-out both;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid $accent;
+  outline-offset: 2px;
+}
+
+// ---- Type: eyebrow / section head ---------------------------------------------------------------
+
+.eyebrow {
+  gap: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: $accent-strong;
+  margin-bottom: 12px;
+
+  &::before {
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: $accent;
+  }
+}
+
+.eyebrow-light {
+  background: none;
+  border: none;
+  color: #818cf8;
+
+  &::before {
+    background: #818cf8;
+  }
+}
+
+.section-head {
+  max-width: 660px;
+  margin-bottom: clamp(36px, 5vw, 56px);
+}
+
+.section-title {
+  font-size: clamp(28px, 3.6vw, 42px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.section-lead {
+  font-size: clamp(15.5px, 1.4vw, 17px);
+  line-height: 1.65;
+  color: $ink-soft;
+}
+
+.section-head-sm,
+.section-head-md,
+.section-head-lg {
+  margin-bottom: clamp(32px, 4.5vw, 48px);
+}
+
+.section-more {
+  margin-top: clamp(28px, 4vw, 40px);
+}
+
+// ---- Buttons ------------------------------------------------------------------------------------
+// One system: primary (violet fill + tinted elevation), secondary (outline, no shadow), on-dark outline.
+
+.btn-pill {
+  min-height: 44px;
+  padding: 0 24px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, filter 0.2s, transform 0.2s;
+
+  svg {
+    transition: transform 0.2s;
+  }
+
+  &:hover {
+    transform: none;
+
+    svg {
+      transform: translateX(2px);
+    }
+  }
+
+  &:active {
+    transform: none;
+    filter: brightness(0.96);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent;
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.45;
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.btn-sm {
+  min-height: 40px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+.btn-primary,
+.btn-accent {
+  background: $primary-fill;
+  color: $on-primary;
+  box-shadow: $shadow-primary;
+
+  &:hover {
+    background: color-mix(in srgb, var(--primary) 88%, black);
+    color: $on-primary;
+    box-shadow: $btn-shadow-hover;
+  }
+
+  &:active {
+    background: color-mix(in srgb, var(--primary) 76%, black);
+    filter: none;
+  }
+}
+
+:root[data-theme="dark"] {
+  .btn-primary:hover,
+  .btn-accent:hover {
+    background: color-mix(in srgb, var(--primary) 86%, white);
+  }
+
+  .btn-primary:active,
+  .btn-accent:active {
+    background: color-mix(in srgb, var(--primary) 92%, black);
+  }
+}
+
+// Secondary: outline only, no shadow
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid $primary;
+  color: $primary;
+  box-shadow: none;
+
+  &:hover {
+    background: $primary-tint;
+    color: $primary;
+    border-color: $primary;
+  }
+}
+
+// On dark bands (hero, footer CTA)
+.btn-outline-light {
+  background: rgb(255 255 255 / 0.08);
+  border: 1px solid rgb(255 255 255 / 0.28);
+  color: $white;
+  box-shadow: none;
+
+  &:hover {
+    background: rgb(255 255 255 / 0.14);
+    border-color: rgb(255 255 255 / 0.45);
+    color: $white;
+  }
+}
+
+// White pill on a brand band (kept for cta/hero variants): flat, no coloured shadow
+.btn-white {
+  background: $white;
+  color: var(--brand-deep);
+  box-shadow: none;
+
+  &:hover {
+    color: var(--brand-deep);
+    filter: brightness(0.97);
+  }
+}
+
+// ---- Surfaces -----------------------------------------------------------------------------------
+// Card tiers: flat (border only) / raised (soft elevation, hover lift) / feature (layered gradient)
+
+.course-card,
+.feature-card,
+.step-card,
+.center-card,
+.testimonial-card,
+.scheme-card,
+.role-card,
+.rc-card,
+.career-card,
+.dates-panel,
+.dates-cal,
+.sd-tile,
+.sd-why-item,
+.sd-eligible,
+.stat-row,
+.table-wrap,
+.cd-tabs {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-1;
+}
+
+.card-lift {
+  transition: transform 0.3s $ease-out, box-shadow 0.3s, border-color 0.3s;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: $border-strong;
+    box-shadow: $shadow-2;
+  }
+}
+
+.partners {
+  background: $surface;
+}
+
+// Soft tinted icon tiles instead of solid gradient blocks
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: $radius;
+  background: $primary-tint;
+  color: $primary;
+  box-shadow: inset 0 0 0 1px rgb(79 70 229 / 0.08);
+}
+
+.course-icon,
+.center-icon,
+.partner-icon {
+  border-radius: $radius;
+}
+
+.feature-card {
+  padding: 24px 20px;
+}
+
+.feature-title {
+  font-size: 15px;
+}
+
+.feature-desc {
+  font-size: 13.5px;
+}
+
+.chip {
+  border-color: $border;
+  background: $surface-alt;
+  font-weight: 500;
+}
+
+.badge {
+  font-weight: 600;
+}
+
+// Section bands: page → alt band → brand band
+.section-alt {
+  background: $surface-alt;
+}
+
+.section-tint {
+  background: $surface-alt;
+}
+
+// ---- Forms --------------------------------------------------------------------------------------
+
+input,
+select,
+textarea {
+  border-radius: $radius;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+
+  &:hover {
+    border-color: $icon-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $accent;
+    box-shadow: 0 0 0 3px rgb(99 102 241 / 0.18);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+// ---- Scroll reveal: a touch slower and softer ---------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// ---- Unified type for card titles ---------------------------------------------------------------
+.course-title,
+.step-title,
+.feature-title,
+.center-name {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: $ink;
+}
+
+// ---- Touch devices: no hover-driven movement, only pressed feedback -----------------------------
+@media (hover: none) {
+  .card-lift:hover,
+  .role-tile:hover,
+  .scheme-card:hover,
+  .gallery-card:hover,
+  .tl-node:hover .tl-card:not([open]) {
+    transform: none;
+    box-shadow: $shadow-1;
+  }
+
+  .scheme-card:hover .scheme-media img,
+  .role-tile:hover img,
+  .gallery-card:hover img {
+    transform: none;
+  }
+
+  .btn-pill:hover svg {
+    transform: none;
+  }
+
+  .card-lift:active,
+  .role-tile:active,
+  .scheme-card:active {
+    border-color: $border-strong;
+  }
+}
+
+// ---- Restraint: indigo only for actions; icons and labels use the tone set ----------------------
+// Icon tiles and labels take their colour from the nearest .tone-* (indigo, emerald, amber, rose, sky, teal).
+.feature-icon,
+.course-icon,
+.center-icon,
+.partner-icon,
+.icon-circle,
+.icon-tile-sm {
+  background: var(--tone-bg, #{$primary-tint});
+  color: var(--tone-fg, #{$primary});
+  box-shadow: none;
+}
+
+.step-icon-brand,
+.step-icon-tone {
+  background: var(--tone-bg, #{$primary-tint});
+  color: var(--tone-fg, #{$primary});
+}
+
+.hero-stat-n,
+.stat-n,
+.sd-other-short {
+  color: $ink;
+}
+
+.eyebrow {
+  color: $ink-soft;
+}
+
+.course-link,
+.rc-link,
+.center-link,
+.ann-row-ask {
+  color: $primary;
+}

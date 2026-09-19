@@ -19,7 +19,7 @@
   border: 1px solid $border;
   border-radius: $radius-lg;
   padding: 24px 16px 22px;
-  background: $white;
+  background: $surface;
   text-align: center;
   position: relative;
   min-width: 0;
@@ -40,8 +40,8 @@
   position: relative;
   width: 44px;
   height: 44px;
-  background: $primary-gradient;
-  color: $white;
+  background: $primary-fill;
+  color: $on-primary;
 }
 
 // Tone circle (Career)
@@ -60,11 +60,11 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: $success;
-  color: $white;
+  background: $accent-strong;
+  color: var(--page-bg);
   font-size: 10px;
   font-weight: 800;
-  border: 2px solid $white;
+  border: 2px solid $surface;
 }
 
 .step-title {

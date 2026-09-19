@@ -25,6 +25,8 @@ Description  : Main stylesheet for the OM Academy website (compiled by Vite)
 @use "components/accordion";
 @use "components/modal";
 @use "components/lightbox";
+@use "components/media";
+@use "components/announcement-modal";
 
 /****** Layout ******/
 @use "layout/header";
@@ -34,3 +36,6 @@ Description  : Main stylesheet for the OM Academy website (compiled by Vite)
 /******* Pages ******/
 @use "pages/home";
 @use "pages/other";
+
+/****** Design system layer (last) ******/
+@use "components/system";

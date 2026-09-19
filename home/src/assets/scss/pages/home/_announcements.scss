@@ -27,7 +27,7 @@
     height: 42px;
     padding: 0 16px 0 40px;
     border-radius: $radius-pill;
-    border-color: oklch(0.88 0.01 264);
+    border-color: $border-strong;
   }
 }
 
@@ -54,18 +54,9 @@
   border-radius: $radius-xl;
   padding: 30px;
   color: $white;
-  background: linear-gradient(160deg, oklch(0.4 0.14 265) 0%, oklch(0.3 0.11 265) 100%);
-  box-shadow: 0 24px 48px -28px oklch(0.32 0.12 265 / 0.6);
+  background: linear-gradient(160deg, #4f46e5 0%, #1a2148 100%);
+  box-shadow: $shadow-3;
   min-width: 0;
-}
-
-.ann-pinned-dots {
-  position: absolute;
-  inset: 0;
-  opacity: 0.6;
-  background-image: radial-gradient(oklch(0.98 0.01 264 / 0.08) 1.5px, transparent 1.5px);
-  background-size: 22px 22px;
-  pointer-events: none;
 }
 
 .ann-pinned-body {
@@ -87,7 +78,7 @@
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: oklch(0.86 0.04 264);
+  color: #818cf8;
 }
 
 .ann-pinned-tag {
@@ -97,7 +88,7 @@
   padding: 4px 10px;
   border-radius: $radius-pill;
   background: var(--tone-fg);
-  color: $white;
+  color: var(--tone-bg);
 }
 
 .ann-pinned-date {
@@ -119,7 +110,7 @@
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
-  color: oklch(0.86 0.04 264);
+  color: #818cf8;
 }
 
 .ann-pinned-title {
@@ -133,7 +124,7 @@
 .ann-pinned-desc {
   font-size: 14.5px;
   line-height: 1.65;
-  color: oklch(0.88 0.02 264);
+  color: rgb(255 255 255 / 0.86);
   margin: 0 0 26px;
 }
 
@@ -142,7 +133,7 @@
 }
 
 .ann-list {
-  background: $white;
+  background: $surface;
   border: 1px solid $border;
   border-radius: $radius-xl;
   overflow: hidden;
@@ -183,7 +174,7 @@
   }
 
   &:hover {
-    background: oklch(0.985 0.006 264);
+    background: $surface-soft;
   }
 }
 
@@ -232,7 +223,7 @@
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: oklch(0.75 0.01 264);
+  background: $icon-muted;
 }
 
 .ann-meta-date {
@@ -259,8 +250,16 @@
   align-items: center;
   gap: 4px;
   margin-top: 8px;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 0;
+  border: none;
+  background: none;
+  font: 600 13px $font-family-primary;
+  color: $primary;
+  cursor: pointer;
+
+  &:hover {
+    color: $primary-dark;
+  }
 }
 
 .ann-only {
@@ -273,9 +272,9 @@
 .ann-empty {
   text-align: center;
   padding: 40px 20px;
-  border: 1px dashed oklch(0.86 0.02 264);
+  border: 1px dashed $border-strong;
   border-radius: $radius-xl;
-  background: $white;
+  background: $surface;
 }
 
 .ann-empty-title {
@@ -300,9 +299,9 @@
   gap: 14px 24px;
   flex-wrap: wrap;
   padding: 18px 22px;
-  border-radius: 16px;
+  border-radius: $radius-lg;
   background: $primary-tint;
-  border: 1px solid oklch(0.9 0.04 264);
+  border: 1px solid $border;
 }
 
 .ann-subscribe-info {
@@ -318,7 +317,7 @@
   width: 42px;
   height: 42px;
   border-radius: $radius-md;
-  background: $white;
+  background: $surface;
   color: $primary;
   flex-shrink: 0;
 }

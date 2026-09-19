@@ -45,16 +45,38 @@
   }
 }
 
-.brand-mark {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: var(--primary-gradient);
-  color: #fff;
-  font: 700 14px var(--font-title);
-  display: grid;
-  place-items: center;
+// Collapsed sidebar shows just the logo glyph (light/dark pair); expanded shows the full wordmark
+.brand-glyph {
+  display: none;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
+  object-fit: contain;
+}
+
+.glyph-dark {
+  display: none;
+}
+
+.brand-logo {
+  display: block;
+  height: 34px;
+  width: auto;
+  margin-bottom: 2px;
+}
+
+.brand-logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] {
+  .brand-logo-light {
+    display: none;
+  }
+
+  .brand-logo-dark {
+    display: block;
+  }
 }
 
 .brand-text {
@@ -135,11 +157,13 @@
   }
 
   &.active {
-    background: var(--primary);
-    color: #fff;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--accent);
 
     .nav-ico {
-      color: #fff;
+      color: var(--primary);
     }
   }
 }
@@ -169,8 +193,8 @@
   color: var(--danger);
 
   .nav-link.active & {
-    background: rgb(255 255 255 / 0.22);
-    color: #fff;
+    background: var(--primary-fill);
+    color: var(--primary-contrast);
   }
 }
 
@@ -349,7 +373,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--danger);
+  background: var(--danger-fill);
   border: 2px solid var(--surface);
 }
 
@@ -475,6 +499,18 @@
 
   .sidebar:not(:hover) {
     width: var(--sidebar-mini-w);
+
+    .glyph-light {
+      display: block;
+    }
+
+    :root[data-theme="dark"] & .glyph-light {
+      display: none;
+    }
+
+    :root[data-theme="dark"] & .glyph-dark {
+      display: block;
+    }
 
     .brand-text,
     .nav-label,

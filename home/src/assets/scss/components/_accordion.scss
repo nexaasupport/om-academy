@@ -14,15 +14,15 @@
 }
 
 .faq-item {
-  border: 1.5px solid oklch(0.91 0.006 264);
+  border: 1.5px solid $border;
   border-radius: $radius-lg;
   padding: 18px 22px;
-  background: $white;
+  background: $surface;
   transition: border-color 0.2s, box-shadow 0.2s;
 
   &[open] {
     border-color: $primary;
-    box-shadow: 0 12px 28px -16px oklch(0.42 0.15 265 / 0.35);
+    box-shadow: $shadow-2;
   }
 
   summary {
@@ -43,8 +43,8 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: $primary-gradient;
-  color: $white;
+  background: $primary-fill;
+  color: $on-primary;
   font-size: 12px;
   flex-shrink: 0;
 }
@@ -68,8 +68,8 @@
   transition: transform 0.25s, background 0.2s, color 0.2s;
 
   details[open] & {
-    background: $primary-gradient;
-    color: $white;
+    background: $primary-fill;
+    color: $on-primary;
     transform: rotate(180deg);
   }
 }

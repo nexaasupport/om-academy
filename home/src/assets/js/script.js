@@ -17,7 +17,10 @@ import {
   dateTones,
   courses,
   schemes,
+  jobRoles,
+  stockPhoto,
 } from "./data.js";
+import { icon } from "./icons.js";
 
 // Helpers
 const qs = (selector, root = document) => root.querySelector(selector);
@@ -26,12 +29,12 @@ const esc = (value) => String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;",
 const plural = (n, word) => n + " " + word + (n === 1 ? "" : "s");
 const whatsappUrl = (text) => "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
 
-const ARROW_14 = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-const ARROW_12 = '<svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-const PIN_ICON = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 3h6l-1 6 3 3v2H7v-2l3-3-1-6z"/></svg>';
+const ARROW_14 = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>';
+const ARROW_12 = '<svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>';
+const PIN_ICON = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>';
 
 // Page scroll is locked while the drawer, the enquiry modal or the lightbox is open.
-const overlays = { menu: false, enquiry: false, lightbox: false };
+const overlays = { menu: false, enquiry: false, lightbox: false, announcement: false };
 
 function setOverlay(name, open) {
   overlays[name] = open;
@@ -45,6 +48,54 @@ function tabButton(label, count, pressed) {
 
 function setPressed(group, label) {
   qsa(".tab", group).forEach((tab) => tab.setAttribute("aria-pressed", String(tab.dataset.filter === label)));
+}
+
+// Theme: header switch. Saved choice (shared with the portal key) wins, otherwise the system preference.
+function initTheme() {
+  const root = document.documentElement;
+  const KEY = "om-portal:theme";
+  const buttons = qsa("[data-theme-toggle]");
+  const sync = () => {
+    const dark = root.getAttribute("data-theme") === "dark";
+    buttons.forEach((b) => {
+      if (b.getAttribute("role") === "switch") {
+        b.setAttribute("aria-checked", String(dark));
+      } else {
+        b.setAttribute("aria-pressed", String(dark));
+        b.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+      }
+    });
+  };
+  const apply = (theme, save) => {
+    root.setAttribute("data-theme", theme);
+    if (save) {
+      try { localStorage.setItem(KEY, theme); } catch { /* storage unavailable: theme still applies for this page */ }
+    }
+    sync();
+  };
+  buttons.forEach((b) => b.addEventListener("click", () => apply(root.getAttribute("data-theme") === "dark" ? "light" : "dark", true)));
+  const mq = window.matchMedia("(prefers-color-scheme: dark)");
+  mq.addEventListener("change", (e) => {
+    let saved = null;
+    try { saved = localStorage.getItem(KEY); } catch { /* ignore */ }
+    if (saved !== "light" && saved !== "dark") apply(e.matches ? "dark" : "light", false);
+  });
+  window.addEventListener("storage", (e) => {
+    if (e.key === KEY && (e.newValue === "light" || e.newValue === "dark")) apply(e.newValue, false);
+  });
+  sync();
+}
+
+// Sub-navigation lists come from data.js so desktop dropdown and mobile accordion always match
+function initNavMenus() {
+  const courseMenu = qs("[data-sub-menu='courses']");
+  const schemeMenu = qs("[data-sub-menu='schemes']");
+  if (courseMenu) {
+    courseMenu.innerHTML = courses.map((c) => `<li><a href="course-details.html?course=${esc(c.slug)}">${esc(c.title)}<small>${esc(c.category)}</small></a></li>`).join("");
+  }
+  if (schemeMenu) {
+    schemeMenu.innerHTML = schemes.map((s) => `<li><a href="scheme-details.html?scheme=${esc(s.slug)}">${esc(s.short)}<small>${esc(s.name)}</small></a></li>`).join("");
+  }
 }
 
 // Header & drawer
@@ -66,15 +117,63 @@ function initMenu() {
     if (target && getComputedStyle(target).display !== "none") target.focus({ preventScroll: true });
   }
 
+  // Accordion (mobile) / click-to-open dropdown (desktop) sub-navigation
+  qsa(".sub-toggle, .nav-more-btn", nav || document).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item = btn.closest(".has-sub");
+      const open = !item.classList.contains("is-open");
+      qsa(".has-sub.is-open", nav).forEach((other) => {
+        if (other !== item) {
+          other.classList.remove("is-open");
+          qs(".sub-toggle", other).setAttribute("aria-expanded", "false");
+        }
+      });
+      item.classList.toggle("is-open", open);
+      btn.setAttribute("aria-expanded", String(open));
+    });
+  });
+  document.addEventListener("click", (event) => {
+    if (event.target.closest(".has-sub")) return;
+    qsa(".has-sub.is-open", nav || document).forEach((item) => {
+      item.classList.remove("is-open");
+      qs(".sub-toggle", item).setAttribute("aria-expanded", "false");
+    });
+  });
+
+  // Keep Tab inside the open sheet
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Tab" || !overlays.menu || !nav) return;
+    const focusable = qsa("a[href], button:not([disabled])", nav).filter((el) => el.offsetParent !== null);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  // Header hairline + shadow once the page has scrolled
+  const header = qs(".site-header");
+  if (header) {
+    const onScroll = () => header.classList.toggle("is-scrolled", window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
   if (burger) burger.addEventListener("click", () => setOpen(!overlays.menu));
   if (closeBtn) closeBtn.addEventListener("click", () => setOpen(false));
   if (backdrop) backdrop.addEventListener("click", () => setOpen(false));
 
   // Nav links scroll only after the menu has closed and page scroll is unlocked:
   // a native anchor jump started while body overflow is still hidden gets cancelled.
-  qsa(".brand, #site-nav .nav-link").forEach((link) => {
+  qsa(".brand, #site-nav .nav-link, #site-nav .sub-menu a").forEach((link) => {
     link.addEventListener("click", (event) => {
       const href = link.getAttribute("href") || "";
+      if (overlays.menu && !href.startsWith("#")) setOpen(false);
       // Only same-page "#id" links are intercepted for a smooth scroll; "other-page.html#id"
       // links (used from pages other than index.html) get a normal browser navigation.
       if (!href.startsWith("#")) return;
@@ -109,7 +208,12 @@ function initScrollSpy() {
     entries.forEach((entry) => {
       if (!entry.isIntersecting || entry.target.id === active) return;
       active = entry.target.id;
-      links.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === "#" + active));
+      links.forEach((link) => {
+        const on = link.getAttribute("href") === "#" + active;
+        link.classList.toggle("active", on);
+        if (on) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
     });
   }, { rootMargin: "-45% 0px -50% 0px" });
 
@@ -198,6 +302,90 @@ function initEnquiry(menu) {
   return { isOpen: () => overlays.enquiry, close };
 }
 
+// Announcement popup: a product-style notification dialog. Auto-opens once per new announcement
+// (remembered in localStorage) on pages that set data-auto, and opens from any [data-ann-open] control.
+function initAnnouncementPopup() {
+  const modal = qs("[data-ann-modal]");
+  if (!modal) return { isOpen: () => false, close() {} };
+
+  const TAG_ICONS = { IMPORTANT: "megaphone", NOTICE: "calendar", UPDATE: "file", SCHOLARSHIP: "award" };
+  const el = {
+    icon: qs("[data-pop-icon]", modal),
+    tag: qs("[data-pop-tag]", modal),
+    time: qs("[data-pop-time]", modal),
+    title: qs("[data-pop-title]", modal),
+    body: qs("[data-pop-body]", modal),
+    media: qs("[data-pop-media]", modal),
+    img: qs("[data-pop-img]", modal),
+    cta: qs("[data-pop-cta]", modal),
+    close: qs("[data-pop-close]", modal),
+  };
+  const list = announcements.map((a) => Object.assign({}, a, { id: annId(a), tone: tagTones[a.tag] || "blue" }));
+  const KEY = "om-seen-announcement";
+  let trigger = null;
+
+  function open(a, from) {
+    if (!a || !modal.hidden) return;
+    trigger = from || null;
+    modal.className = "pop-overlay tone-" + a.tone;
+    el.icon.innerHTML = icon(TAG_ICONS[a.tag] || "bell", 26);
+    el.tag.textContent = a.tag;
+    el.time.innerHTML = icon("calendar", 14) + " " + esc(a.date) + (a.time ? " · " + icon("clock", 14) + " " + esc(a.time) : "");
+    el.title.textContent = a.title;
+    el.body.textContent = a.desc;
+    el.media.hidden = !a.image;
+    if (a.image) el.img.src = stockPhoto(a.image, 900, 65);
+    el.cta.setAttribute("data-enquire-topic", a.title);
+    modal.hidden = false;
+    setOverlay("announcement", true);
+    try { localStorage.setItem(KEY, a.id); } catch { /* storage unavailable */ }
+    el.close.focus();
+  }
+
+  function close() {
+    if (modal.hidden) return;
+    modal.classList.add("is-closing");
+    setTimeout(() => {
+      modal.hidden = true;
+      modal.classList.remove("is-closing");
+      setOverlay("announcement", false);
+      if (trigger && trigger.isConnected) trigger.focus({ preventScroll: true });
+    }, 220);
+  }
+
+  el.close.addEventListener("click", close);
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) close();
+    else if (event.target.closest("[data-pop-cta], [data-pop-all]")) {
+      modal.hidden = true;
+      setOverlay("announcement", false);
+    }
+  });
+  // Keep Tab inside the dialog
+  modal.addEventListener("keydown", (event) => {
+    if (event.key !== "Tab") return;
+    const f = qsa("button, a[href]", modal).filter((n) => n.offsetParent !== null);
+    if (!f.length) return;
+    if (event.shiftKey && document.activeElement === f[0]) { event.preventDefault(); f[f.length - 1].focus(); }
+    else if (!event.shiftKey && document.activeElement === f[f.length - 1]) { event.preventDefault(); f[0].focus(); }
+  });
+  document.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-ann-open]");
+    if (btn) open(list.find((a) => a.id === btn.dataset.annOpen), btn);
+  });
+
+  if (modal.hasAttribute("data-auto") && list.length) {
+    let seen = null;
+    try { seen = localStorage.getItem(KEY); } catch { /* ignore */ }
+    if (seen !== list[0].id) {
+      setTimeout(() => {
+        if (!Object.values(overlays).some(Boolean)) open(list[0]);
+      }, 1600);
+    }
+  }
+  return { isOpen: () => overlays.announcement, close };
+}
+
 // Announcements: filter tabs, search, the pinned latest notice and the list of earlier notices.
 function initAnnouncements() {
   const tabs = qs("[data-ann-tabs]");
@@ -206,61 +394,63 @@ function initAnnouncements() {
   const search = qs("#ann-search");
   if (!tabs || !list) return;
 
-  const state = { filter: "All", query: "" };
-  const items = announcements.map((a) => {
+  const state = { filter: "All", query: "", page: 1 };
+  const pageSize = Number(list.dataset.pageSize) || 0;
+  const TAG_ICONS = { IMPORTANT: "megaphone", NOTICE: "calendar", UPDATE: "file", SCHOLARSHIP: "award" };
+  const items = announcements.map((a, i) => {
     const [day, month, year] = a.date.split(" ");
-    return Object.assign({}, a, { day, month: month.toUpperCase(), year, tone: tagTones[a.tag] || "blue" });
+    return Object.assign({}, a, { id: annId(a), day, month: month.toUpperCase(), year, tone: tagTones[a.tag] || "blue", isNew: i < 3 });
   });
   const inFilter = (a, label) => label === "All" || a.tag === label.toUpperCase();
 
-  const pinnedHtml = (a) => `
-    <article class="ann-pinned">
-      <div class="ann-pinned-dots" aria-hidden="true"></div>
-      <div class="ann-pinned-body">
-        <div class="ann-pinned-top">
-          <span class="ann-pinned-label">${PIN_ICON} LATEST NOTICE</span>
-          <span class="ann-pinned-tag tone-${a.tone}">${esc(a.tag)}</span>
+  const relTime = (a) => {
+    const then = new Date(a.date);
+    const days = Math.round((Date.now() - then.getTime()) / 86400000);
+    if (days < 0) return "Upcoming";
+    if (days === 0) return "Today";
+    if (days < 14) return days + (days === 1 ? " day ago" : " days ago");
+    if (days < 60) return Math.round(days / 7) + " weeks ago";
+    return Math.round(days / 30) + " months ago";
+  };
+
+  // Featured banner: the latest notice as a layered brand surface
+  const bannerHtml = (a) => `
+    <article class="feat tone-${a.tone}">
+      <div class="feat-glow" aria-hidden="true"></div>
+      <div class="feat-body">
+        <div class="feat-top">
+          <span class="feat-ribbon">${icon("sparkle", 14)} Latest</span>
+          <span class="feat-tag">${esc(a.tag)}</span>
+          <span class="feat-rel">${esc(relTime(a))}</span>
         </div>
-        <div class="ann-pinned-date">
-          <span class="ann-day">${esc(a.day)}</span>
-          <span class="ann-pinned-month">${esc(a.month)} ${esc(a.year)}</span>
+        <h3 class="feat-title">${esc(a.title)}</h3>
+        <p class="feat-desc">${esc(a.desc)}</p>
+        <div class="feat-actions">
+          <button type="button" data-ann-open="${esc(a.id)}" class="btn-pill btn-accent btn-sm">Read more ${ARROW_14}</button>
+          <span class="feat-date">${icon("calendar", 15)} ${esc(a.date)}</span>
         </div>
-        <h3 class="ann-pinned-title">${esc(a.title)}</h3>
-        <p class="ann-pinned-desc">${esc(a.desc)}</p>
-        <a href="#enquire" data-enquire-topic="${esc(a.title)}" class="btn-pill btn-white btn-sm ann-ask">Ask about this ${ARROW_14}</a>
       </div>
+      <div class="feat-stamp" aria-hidden="true"><span class="feat-day">${esc(a.day)}</span><span class="feat-mon">${esc(a.month)}</span><span class="feat-yr">${esc(a.year)}</span></div>
     </article>`;
 
-  const rowHtml = (a) => `
-    <div class="ann-row tone-${a.tone}">
-      <div class="ann-date">
-        <div class="ann-date-day">${esc(a.day)}</div>
-        <div class="ann-date-month">${esc(a.month)}</div>
-      </div>
-      <div class="ann-row-body">
-        <div class="ann-meta">
-          <span class="ann-tag">${esc(a.tag)}</span>
-          <span class="ann-dot" aria-hidden="true"></span>
-          <span class="ann-meta-date">${esc(a.date)}</span>
+  // Timeline entry: date rail + category dot + expandable detail
+  const nodeHtml = (a) => `
+    <li class="tl-node tone-${a.tone}">
+      <div class="tl-when"><span class="tl-day">${esc(a.day)}</span><span class="tl-mon">${esc(a.month)}</span></div>
+      <span class="tl-dot" aria-hidden="true">${icon(TAG_ICONS[a.tag] || "bell", 14)}</span>
+      <details class="tl-card">
+        <summary>
+          <span class="tl-meta"><span class="tl-tag">${esc(a.tag)}</span><span class="tl-date">${esc(a.date)}</span><span class="tl-rel">${esc(relTime(a))}</span>${a.isNew ? '<span class="badge-new">New</span>' : ""}</span>
+          <span class="tl-title">${esc(a.title)}</span>
+          <span class="tl-excerpt">${esc(a.desc)}</span>
+          <span class="tl-chev" aria-hidden="true">${icon("chevronDown", 18)}</span>
+        </summary>
+        <div class="tl-detail">
+          <p>${esc(a.desc)}</p>
+          <button type="button" data-ann-open="${esc(a.id)}" class="ann-row-ask">Open announcement ${ARROW_12}</button>
         </div>
-        <h4 class="ann-row-title">${esc(a.title)}</h4>
-        <p class="ann-row-desc">${esc(a.desc)}</p>
-        <a href="#enquire" data-enquire-topic="${esc(a.title)}" class="ann-row-ask">Ask about this ${ARROW_12}</a>
-      </div>
-    </div>`;
-
-  const boardHtml = ([featured, ...rest]) => `
-    <div class="ann-layout">
-      ${pinnedHtml(featured)}
-      <div class="ann-list">
-        <div class="ann-list-head">
-          <h3 class="ann-list-title">Earlier notices</h3>
-          <span class="ann-list-count">${plural(rest.length, "notice")}</span>
-        </div>
-        ${rest.map(rowHtml).join("")}
-        ${rest.length ? "" : '<div class="ann-only">That\'s the only notice in this view.</div>'}
-      </div>
-    </div>`;
+      </details>
+    </li>`;
 
   const emptyHtml = `
     <div class="ann-empty">
@@ -269,13 +459,43 @@ function initAnnouncements() {
       <button type="button" class="btn-pill btn-ghost" data-ann-reset>Show all announcements</button>
     </div>`;
 
+  const pagerHtml = (pages) => {
+    if (pages < 2) return "";
+    const nums = Array.from({ length: pages }, (_, i) => {
+      const n = i + 1;
+      return `<button type="button" class="pager-btn${n === state.page ? " is-current" : ""}" data-page="${n}"${n === state.page ? ' aria-current="page"' : ""}>${n}</button>`;
+    }).join("");
+    return `<nav class="pager" aria-label="Announcement pages">
+      <button type="button" class="pager-btn" data-page="${state.page - 1}" ${state.page === 1 ? "disabled" : ""} aria-label="Previous page">${icon("chevronLeft", 16)}</button>
+      ${nums}
+      <button type="button" class="pager-btn" data-page="${state.page + 1}" ${state.page === pages ? "disabled" : ""} aria-label="Next page">${icon("chevronRight", 16)}</button>
+    </nav>`;
+  };
+
+  const limit = Number(list.dataset.limit) || 0;
+
   function render() {
     const needle = state.query.trim().toLowerCase();
     const shown = items
       .filter((a) => inFilter(a, state.filter))
       .filter((a) => !needle || (a.title + " " + a.desc + " " + a.tag).toLowerCase().includes(needle));
     if (count) count.textContent = "Showing " + plural(shown.length, "announcement");
-    list.innerHTML = shown.length ? boardHtml(shown) : emptyHtml;
+    if (!shown.length) {
+      list.innerHTML = emptyHtml;
+      return;
+    }
+    const [featured, ...rest] = shown;
+    let feed = rest;
+    let pager = "";
+    if (limit) {
+      feed = rest.slice(0, limit);
+    } else if (pageSize) {
+      const pages = Math.ceil(rest.length / pageSize) || 1;
+      state.page = Math.min(state.page, pages);
+      feed = rest.slice((state.page - 1) * pageSize, state.page * pageSize);
+      pager = pagerHtml(pages);
+    }
+    list.innerHTML = `<div class="ann-feed">${bannerHtml(featured)}${feed.length ? `<ol class="tl">${feed.map(nodeHtml).join("")}</ol>` : ""}${pager}</div>`;
   }
 
   // Tabs are built once (their counts don't depend on the search) so keyboard focus survives filtering.
@@ -287,6 +507,7 @@ function initAnnouncements() {
     const tab = event.target.closest(".tab");
     if (!tab) return;
     state.filter = tab.dataset.filter;
+    state.page = 1;
     setPressed(tabs, state.filter);
     render();
   });
@@ -294,11 +515,19 @@ function initAnnouncements() {
   if (search) {
     search.addEventListener("input", () => {
       state.query = search.value;
+      state.page = 1;
       render();
     });
   }
 
   list.addEventListener("click", (event) => {
+    const pageBtn = event.target.closest("[data-page]");
+    if (pageBtn && !pageBtn.disabled) {
+      state.page = Number(pageBtn.dataset.page);
+      render();
+      list.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
     if (!event.target.closest("[data-ann-reset]")) return;
     state.filter = "All";
     state.query = "";
@@ -376,9 +605,9 @@ function initImportantDates() {
 
     return `
       <div class="dates-cal-head">
-        <button type="button" class="dates-cal-nav" data-cal-prev aria-label="Previous month">${'<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>'}</button>
+        <button type="button" class="dates-cal-nav" data-cal-prev aria-label="Previous month">${icon("chevronLeft", 16)}</button>
         <div class="dates-cal-title">${MONTHS[m]} ${y}</div>
-        <button type="button" class="dates-cal-nav" data-cal-next aria-label="Next month">${'<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>'}</button>
+        <button type="button" class="dates-cal-nav" data-cal-next aria-label="Next month">${icon("chevronRight", 16)}</button>
       </div>
       <div class="dates-cal-grid dates-cal-dow">${["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((d) => `<span>${d}</span>`).join("")}</div>
       <div class="dates-cal-grid">${cells.map(dayHtml).join("")}</div>`;
@@ -442,8 +671,10 @@ function initImportantDates() {
   render();
 }
 
-// Course details page (course-details.html?course=<slug>): renders the course + a
-// "Related Courses" sidebar of other courses in the same category.
+const annId = (a) => (a.date + "-" + a.title).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+const stars = (n) => `<span class="rating" aria-label="Rated ${n} out of 5">${icon("star", 13, "icon-fill")} ${n}</span>`;
+
+// Course details page (course-details.html?course=<slug>): tabbed overview + "Related Courses" sidebar.
 function initCourseDetails() {
   const root = qs("[data-course-detail]");
   if (!root) return;
@@ -453,71 +684,215 @@ function initCourseDetails() {
   if (!course) return;
 
   document.title = course.title + " | OM Academy";
+  const TABS = [["overview", "Overview", "file"], ["curriculum", "Curriculum", "book"], ["instructor", "Instructor", "users"], ["reviews", "Reviews", "star"], ["faqs", "FAQs", "info"]];
+  const check = (text) => `<div class="cd-learn-item"><span class="icon-tile-sm tone-${course.tone}">${icon("check", 14)}</span><span>${esc(text)}</span></div>`;
+
+  const panels = {
+    overview: `
+      <h2 class="cd-h2">About This Course</h2>
+      <p class="cd-summary">${esc(course.summary)}</p>
+      <div class="cd-highlights">
+        ${course.highlights.map((h) => `<div class="cd-highlight"><span class="icon-circle tone-${course.tone}">${icon("shield", 20)}</span><span>${esc(h)}</span></div>`).join("")}
+      </div>
+      <h2 class="cd-h2">What You Will Learn</h2>
+      <div class="cd-learn-grid">${course.learn.map(check).join("")}</div>`,
+    curriculum: `
+      <h2 class="cd-h2">Curriculum</h2>
+      <ol class="cd-modules">${course.learn.map((l, i) => `<li><span class="cd-module-n">${i + 1}</span><span>${esc(l)}</span></li>`).join("")}</ol>`,
+    instructor: `
+      <h2 class="cd-h2">Instructor</h2>
+      <p class="cd-summary">Trained by OM Academy's certified faculty with hands-on lab experience. Instructor profiles will be listed here once confirmed by the academy.</p>`,
+    reviews: `
+      <h2 class="cd-h2">Student Reviews</h2>
+      <p class="cd-summary">${course.rating ? `Rated <strong>${course.rating} / 5</strong> by ${course.reviews} students.` : "Reviews will appear here."}</p>`,
+    faqs: `
+      <h2 class="cd-h2">Frequently Asked Questions</h2>
+      <p class="cd-summary">Eligibility, fees and batch timings vary by centre. <a href="#enquire" data-enquire="${esc(course.title)}">Ask our counsellor</a> for the latest details.</p>`,
+  };
 
   root.innerHTML = `
     <div class="cd-hero tone-${course.tone}">
       <span class="chip tone-${course.tone}">${esc(course.category)}</span>
       <h1 class="cd-title">${esc(course.title)}</h1>
       <div class="cd-meta">
-        ${course.rating ? `<span class="cd-meta-item">★ ${course.rating} (${course.reviews})</span>` : ""}
-        ${course.hours ? `<span class="cd-meta-item">${course.hours} Hours</span>` : ""}
-        ${course.students ? `<span class="cd-meta-item">${esc(course.students)} Students</span>` : ""}
+        ${course.rating ? `<span class="cd-meta-item">${stars(course.rating)} (${course.reviews})</span>` : ""}
+        ${course.hours ? `<span class="cd-meta-item">${icon("clock", 15)} ${course.hours} Hours</span>` : ""}
+        ${course.students ? `<span class="cd-meta-item">${icon("users", 15)} ${esc(course.students)} Students</span>` : ""}
       </div>
     </div>
-    <h2 class="cd-h2">About This Course</h2>
-    <p class="cd-summary">${esc(course.summary)}</p>
-    <div class="cd-highlights">
-      ${course.highlights.map((h) => `<div class="cd-highlight"><span class="icon-tile icon-tile-sm tone-${course.tone}">${'<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'}</span><span>${esc(h)}</span></div>`).join("")}
+    <div class="cd-tabs" role="tablist" aria-label="Course sections">
+      ${TABS.map(([id, label, ic], i) => `<button type="button" role="tab" class="cd-tab" id="tab-${id}" aria-controls="panel-${id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-tab="${id}">${icon(ic, 16)}<span>${label}</span></button>`).join("")}
     </div>
-    <h2 class="cd-h2">What You Will Learn</h2>
-    <div class="cd-learn-grid">
-      ${course.learn.map((l) => `<div class="cd-learn-item"><span class="icon-tile icon-tile-sm tone-${course.tone}">${'<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'}</span><span>${esc(l)}</span></div>`).join("")}
-    </div>
-    <a href="#enquire" data-enquire="${esc(course.title)}" class="btn-pill btn-primary cd-enquire">Enquire About This Course ${ARROW_14}</a>`;
+    ${TABS.map(([id], i) => `<div role="tabpanel" class="cd-panel" id="panel-${id}" aria-labelledby="tab-${id}" ${i ? "hidden" : ""}>${panels[id]}</div>`).join("")}
+    <a href="#enquire" data-enquire="${esc(course.title)}" class="btn-pill btn-primary cd-enquire">Enquire About This Course ${icon("arrow", 14)}</a>`;
+
+  const tabs = qsa(".cd-tab", root);
+  const select = (id, focus) => {
+    tabs.forEach((t) => {
+      const on = t.dataset.tab === id;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      if (on && focus) t.focus();
+    });
+    qsa(".cd-panel", root).forEach((p) => { p.hidden = p.id !== "panel-" + id; });
+  };
+  root.addEventListener("click", (event) => {
+    const tab = event.target.closest(".cd-tab");
+    if (tab) select(tab.dataset.tab);
+  });
+  root.addEventListener("keydown", (event) => {
+    const i = tabs.findIndex((t) => t === document.activeElement);
+    if (i < 0 || !["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (i + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    select(tabs[next].dataset.tab, true);
+  });
 
   const related = qs("[data-related-courses]");
   if (!related) return;
   const others = courses.filter((c) => c.slug !== course.slug && c.category === course.category);
-  const pool = (others.length ? others : courses.filter((c) => c.slug !== course.slug)).slice(0, 3);
-  related.innerHTML = pool.map((c) => `
+  const rest = courses.filter((c) => c.slug !== course.slug && !others.includes(c));
+  related.innerHTML = others.concat(rest).slice(0, 3).map((c, i) => `
     <a href="course-details.html?course=${esc(c.slug)}" class="rc-card card-lift tone-${c.tone}">
-      <span class="chip chip-sm tone-${c.tone}">${esc(c.category)}</span>
-      <span class="rc-title">${esc(c.title)}</span>
-      ${c.rating ? `<span class="rc-meta">★ ${c.rating} (${c.reviews}) · ${c.hours ? c.hours + " Hours" : ""} · ${esc(c.students)} Students</span>` : ""}
-      <span class="rc-link">View Course ${ARROW_12}</span>
+      <span class="rc-media"><img src="${stockPhoto(RELATED_PHOTOS[i % RELATED_PHOTOS.length], 240, 60)}" alt="" loading="lazy" width="96" height="96"></span>
+      <span class="rc-body">
+        <span class="chip chip-sm tone-${c.tone}">${esc(c.category)}</span>
+        <span class="rc-title">${esc(c.title)}</span>
+        <span class="rc-meta">${c.rating ? stars(c.rating) : ""}${c.hours ? `<span>${icon("clock", 12)} ${c.hours} Hours</span>` : ""}${c.students ? `<span>${icon("users", 12)} ${esc(c.students)} Students</span>` : ""}</span>
+        <span class="rc-link">View Course ${icon("arrow", 12)}</span>
+      </span>
     </a>`).join("");
 }
 
-// Scheme details page (scheme-details.html?scheme=<slug>).
+const RELATED_PHOTOS = ["1569653402334-2e98fbaa80ee", "1657812670261-7b76ba04525c", "1522071820081-009f0129c71c"];
+
+// Scheme cards (homepage "Our Key Skill Development Programmes" and schemes.html)
+function initSchemeCards() {
+  qsa("[data-scheme-cards]").forEach((host) => {
+    host.innerHTML = schemes.map((s, i) => `
+      <article class="scheme-card card-lift fu${i ? " delay-" + i * 80 : ""} tone-${s.tone}">
+        <div class="scheme-media"><img src="${stockPhoto(s.photo, 600, 60)}" alt="" loading="lazy" width="600" height="338"></div>
+        <div class="scheme-body">
+          <div class="scheme-short">${esc(s.short)}</div>
+          <div class="scheme-authority">${esc(s.name)}</div>
+          <span class="badge">${esc(s.tag)}</span>
+          <ul class="scheme-points">${s.highlights.map((h) => `<li>${icon("check", 14)}<span>${esc(h)}</span></li>`).join("")}</ul>
+          <a href="scheme-details.html?scheme=${esc(s.slug)}" class="btn-pill btn-primary btn-sm scheme-cta">${s.slug === "other-skill" ? "Explore Courses" : "View Details"} ${icon("arrow", 14)}</a>
+        </div>
+      </article>`).join("");
+  });
+}
+
+// "Popular Job Roles & Training Domains": bento grid of photo tiles (first tile is the featured one)
+function initJobRoles() {
+  const host = qs("[data-job-roles]");
+  if (!host) return;
+  host.innerHTML = jobRoles.map((r, i) => `
+    <a href="${esc(r.href)}" class="role-tile role-tile-${i + 1}">
+      <img src="${stockPhoto(r.photo, i === 0 ? 900 : 600, 60)}" alt="" loading="lazy" width="600" height="420">
+      <span class="role-scrim" aria-hidden="true"></span>
+      <span class="role-icon">${icon(r.icon, 20)}</span>
+      <span class="role-content">
+        <span class="role-title">${esc(r.title)}</span>
+        <span class="role-blurb">${esc(r.blurb)}</span>
+        ${r.tags ? `<span class="role-tags">${r.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</span>` : ""}
+      </span>
+      <span class="role-go" aria-hidden="true">${icon("arrow", 18)}</span>
+    </a>`).join("");
+}
+
+// Scheme details page (scheme-details.html?scheme=<slug>): compact hero, key-facts strip, content column
+// and a sticky enquiry card.
 function initSchemeDetails() {
   const root = qs("[data-scheme-detail]");
   if (!root) return;
 
   const slug = new URLSearchParams(location.search).get("scheme");
-  const scheme = schemes.find((s) => s.slug === slug) || schemes[0];
-  if (!scheme) return;
-
-  document.title = scheme.short + " | OM Academy";
+  const s = schemes.find((x) => x.slug === slug) || schemes[0];
+  document.title = s.short + " | OM Academy";
+  const TILE_ICONS = ["building", "layers", "gradcap", "briefcase"];
+  const JOURNEY = [["search", "Explore", "Find the right course"], ["file", "Enrol", "Complete admission"], ["book", "Learn", "Hands-on training"], ["award", "Certify", "Get certified"], ["briefcase", "Career", "Get placed"]];
+  const WHY = [["sparkle", "Focused training"], ["layers", "Practical skills"], ["building", "Industry-relevant"], ["briefcase", "Career-oriented"], ["shield", "Government-supported"]];
+  const pill = (status) => `<span class="status-pill ${status === "Available" ? "is-available" : "is-upcoming"}">${esc(status)}</span>`;
+  const other = schemes.filter((x) => x.slug !== s.slug);
 
   root.innerHTML = `
-    <div class="sd-hero tone-${scheme.tone}">
-      <span class="chip tone-${scheme.tone}">${esc(scheme.tag)}</span>
-      <h1 class="cd-title">${esc(scheme.short)}</h1>
-      <p class="cd-summary">${esc(scheme.name)}</p>
-    </div>
-    <h2 class="cd-h2">About ${esc(scheme.short)}</h2>
-    <p class="cd-summary">${esc(scheme.summary)}</p>
-    <div class="sd-authority"><strong>Authority:</strong> ${esc(scheme.authority)}</div>
-    <div class="cd-highlights">
-      ${scheme.highlights.map((h) => `<div class="cd-highlight"><span class="icon-tile icon-tile-sm tone-${scheme.tone}">${'<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'}</span><span>${esc(h)}</span></div>`).join("")}
-    </div>
-    <h2 class="cd-h2">Who Can Apply?</h2>
-    <ul class="sd-eligibility">${scheme.eligibility.map((e) => `<li>${esc(e)}</li>`).join("")}</ul>
-    <h2 class="cd-h2">Courses Under ${esc(scheme.short)}</h2>
-    <div class="grid-4 sd-courses">
-      ${scheme.courses.map((c) => `<div class="chip tone-${scheme.tone} sd-course-chip">${esc(c)}</div>`).join("")}
-    </div>
-    <a href="#enquire" data-enquire="${esc(scheme.short)}" class="btn-pill btn-primary cd-enquire">Enquire About ${esc(scheme.short)} ${ARROW_14}</a>`;
+    <section class="sd-hero">
+      <div class="sd-hero-copy">
+        <span class="sd-badge">${esc(s.tag)}</span>
+        <h1 class="sd-hero-title">${esc(s.short)}</h1>
+        <p class="sd-hero-name">${esc(s.name)}</p>
+        <p class="sd-hero-lead">${icon("building", 16)} ${esc(s.authority)}</p>
+        <div class="sd-hero-ctas">
+          <a href="#careers" class="btn-pill btn-primary">Explore courses ${icon("arrow", 16)}</a>
+          <a href="#enquire" data-enquire="${esc(s.short)}" class="btn-pill btn-outline-light">Enquire now</a>
+        </div>
+      </div>
+      <figure class="sd-hero-media"><img src="${stockPhoto(s.photo, 900, 65)}" alt="" width="900" height="600"></figure>
+    </section>
+
+    <div class="sd-stats">${s.tiles.map(([t, d], i) => `<div class="sd-stat tone-${["blue", "green", "purple", "amber"][i % 4]}"><span class="icon-circle">${icon(TILE_ICONS[i], 20)}</span><div><div class="sd-tile-title">${esc(t)}</div><div class="sd-tile-desc">${esc(d)}</div></div></div>`).join("")}</div>
+
+    <div class="sd-layout">
+      <div class="sd-main">
+        <section class="sd-section sd-first">
+          <h2 class="sd-h2">About ${esc(s.short)}</h2>
+          <p class="cd-summary">${esc(s.summary)}</p>
+        </section>
+
+        <section class="sd-section" id="careers">
+          <h2 class="sd-h2">Choose your career path</h2>
+          <p class="cd-summary">${s.careerCourses.length} specialised courses to start a rewarding career.</p>
+          <div class="sd-careers">${s.careerCourses.map((c) => `
+            <article class="career-card card-lift">
+              <div class="career-media"><img src="${stockPhoto(c.photo, 480, 60)}" alt="" loading="lazy" width="480" height="300"></div>
+              <div class="career-body">
+                <h3 class="career-title">${esc(c.name)}</h3>
+                <p class="career-desc">${esc(c.desc)}</p>
+                <a href="#enquire" data-enquire="${esc(c.name)}" class="course-link">View course ${icon("arrow", 14)}</a>
+              </div>
+            </article>`).join("")}</div>
+        </section>
+
+        <section class="sd-section">
+          <h2 class="sd-h2">Training to career, step by step</h2>
+          <ol class="sd-journey">${JOURNEY.map(([ic, t, d], i) => `<li class="sd-step tone-${["blue", "green", "amber", "purple", "rust"][i % 5]}"><span class="sd-step-icon"><span class="icon-circle">${icon(ic, 26)}</span><span class="sd-step-n">${i + 1}</span></span><div class="sd-step-title">${t}</div><div class="sd-step-desc">${d}</div></li>`).join("")}</ol>
+        </section>
+
+        <section class="sd-section">
+          <h2 class="sd-h2">Available training batches</h2>
+          <div class="table-wrap"><table class="batch-table">
+            <thead><tr><th>Course</th><th>Batch 1</th><th>Batch 2</th><th>Batch 3</th><th>Batch 4</th><th>Status</th></tr></thead>
+            <tbody>${s.batches.map(([name, b1, b2, b3, b4, status]) => `<tr><th scope="row">${esc(name)}</th><td>${b1}</td><td>${b2}</td><td>${b3}</td><td>${b4}</td><td>${pill(status)}</td></tr>`).join("")}</tbody>
+          </table></div>
+        </section>
+
+        <section class="sd-section">
+          <h2 class="sd-h2">Why choose ${esc(s.short)}?</h2>
+          <div class="sd-why">${WHY.map(([ic, t], i) => `<div class="sd-why-item tone-${["blue", "green", "purple", "amber", "rust"][i % 5]}"><span class="icon-circle">${icon(ic, 20)}</span><span>${t}</span></div>`).join("")}</div>
+        </section>
+
+        <section class="sd-section">
+          <h2 class="sd-h2">Explore other schemes</h2>
+          <div class="sd-others">${other.map((o) => `<a href="scheme-details.html?scheme=${esc(o.slug)}" class="sd-other card-lift"><span class="sd-other-short">${esc(o.short)}</span><span class="sd-other-name">${esc(o.name)}</span><span class="rc-link">View scheme ${icon("arrow", 12)}</span></a>`).join("")}</div>
+        </section>
+      </div>
+
+      <aside class="sd-aside">
+        <div class="sd-card">
+          <div class="sd-card-title">Interested in ${esc(s.short)}?</div>
+          <p class="sd-card-text">Talk to a counsellor about eligibility, fees and the next batch.</p>
+          <a href="#enquire" data-enquire="${esc(s.short)}" class="btn-pill btn-primary sd-card-cta">Enquire now ${icon("arrow", 16)}</a>
+          <div class="sd-card-alt">
+            <a href="tel:+919992887708" class="btn-pill btn-ghost btn-sm">${icon("phone", 16)} Call</a>
+            <a href="https://wa.me/919992887708" target="_blank" rel="noopener" class="btn-pill btn-ghost btn-sm">WhatsApp</a>
+          </div>
+          <div class="sd-card-sep"></div>
+          <div class="sd-card-sub">${icon("users", 16)} Who can apply</div>
+          <ul class="sd-eligibility">${s.eligibility.map((e) => `<li>${icon("check", 14)}<span>${esc(e)}</span></li>`).join("")}</ul>
+        </div>
+      </aside>
+    </div>`;
 }
 
 // Lightbox: pages through the photos that were visible in the gallery when it opened.
@@ -617,9 +992,15 @@ function initGallery(lightbox) {
   const count = qs("[data-gallery-count]");
   if (!tabs || !grid) return;
 
-  const state = { filter: "All" };
+  const pageSize = Number(grid.dataset.pageSize) || 0;
+  const more = qs("[data-gallery-more]");
+  const sort = qs("[data-gallery-sort]");
+  const state = { filter: "All", limit: pageSize || Infinity, oldest: false };
   const inFilter = (g, label) => label === "All" || g.group === label;
-  const shown = () => galleryItems.filter((g) => inFilter(g, state.filter));
+  const shown = () => {
+    const list = galleryItems.filter((g) => inFilter(g, state.filter));
+    return state.oldest ? list.slice().reverse() : list;
+  };
 
   const cardHtml = (g, i) => `
     <button type="button" class="gallery-card card-lift fu${i ? " delay-" + i * 60 : ""}" data-photo="${g.index}" aria-label="View photo: ${esc(g.title)}">
@@ -633,7 +1014,8 @@ function initGallery(lightbox) {
   function render() {
     const list = shown();
     if (count) count.textContent = plural(list.length, "photo");
-    grid.innerHTML = list.map(cardHtml).join("");
+    grid.innerHTML = list.slice(0, state.limit).map(cardHtml).join("");
+    if (more) more.hidden = list.length <= state.limit;
   }
 
   tabs.innerHTML = galleryFilters
@@ -644,9 +1026,23 @@ function initGallery(lightbox) {
     const tab = event.target.closest(".tab");
     if (!tab) return;
     state.filter = tab.dataset.filter;
+    state.limit = pageSize || Infinity;
     setPressed(tabs, state.filter);
     render();
   });
+
+  if (more) {
+    more.addEventListener("click", () => {
+      state.limit += pageSize;
+      render();
+    });
+  }
+  if (sort) {
+    sort.addEventListener("change", () => {
+      state.oldest = sort.value === "oldest";
+      render();
+    });
+  }
 
   grid.addEventListener("click", (event) => {
     const card = event.target.closest("[data-photo]");
@@ -664,15 +1060,20 @@ function initWhatsappLinks() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
+  initNavMenus();
   const menu = initMenu();
   initScrollSpy();
   const enquiry = initEnquiry(menu);
+  const popup = initAnnouncementPopup();
   const lightbox = initLightbox();
   initAnnouncements();
   initImportantDatesPanel();
   initImportantDates();
   initCourseDetails();
   initSchemeDetails();
+  initSchemeCards();
+  initJobRoles();
   initGallery(lightbox);
   initWhatsappLinks();
 
@@ -681,6 +1082,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (event.key === "Escape") {
       if (lightbox.isOpen()) lightbox.close();
       else if (enquiry.isOpen()) enquiry.close();
+      else if (popup.isOpen()) popup.close();
       else if (menu.isOpen()) menu.close();
     } else if (lightbox.isOpen() && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
       lightbox.step(event.key === "ArrowRight" ? 1 : -1);

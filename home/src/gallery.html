@@ -32,8 +32,10 @@
                 <div class="gallery-toolbar">
                     <div aria-live="polite" class="gallery-count">Showing <strong data-gallery-count></strong></div>
                     <div role="group" aria-label="Filter photos" class="filter-tabs" data-gallery-tabs></div>
+                    <label class="sort-select"><span class="sr-only">Sort photos</span><select data-gallery-sort><option value="latest">Latest First</option><option value="oldest">Oldest First</option></select></label>
                 </div>
-                <div class="grid-4" data-gallery-grid></div>
+                <div class="grid-4" data-gallery-grid data-page-size="8"></div>
+                <div class="section-more"><button type="button" class="btn-pill btn-ghost btn-sm" data-gallery-more>Load More Photos <svg class="icon-arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></button></div>
             </section>
 
             <!-- CTA -->
@@ -45,7 +47,7 @@
                         <div class="cta-title">Be a Part of Our Learning Community</div>
                         <div class="cta-sub">Join 500+ students building their skills and achieving their career goals with OM Academy.</div>
                     </div>
-                    <a href="index.html#courses" class="btn-pill btn-white cta-btn">Explore Courses <svg class="icon-arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                    <a href="index.html#courses" class="btn-pill btn-white cta-btn">Explore Courses <svg class="icon-arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></a>
                 </div>
             </section>
 
@@ -62,6 +64,8 @@
     @@include('partials/enquiry-modal.html')
 
     @@include('partials/lightbox.html')
+
+    @@include('partials/announcement-modal.html', {"auto": "yes"})
 
     @@include('partials/script.html', {"page": "gallery"})
 

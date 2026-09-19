@@ -21,11 +21,11 @@
   gap: 8px;
   font-size: 13.5px;
   font-weight: 600;
-  color: oklch(0.88 0.02 264);
+  color: rgb(255 255 255 / 0.86);
   margin-bottom: 14px;
 
   a {
-    @include link-color(oklch(0.88 0.02 264));
+    @include link-color(rgb(255 255 255 / 0.86));
 
     &:hover {
       color: $white;
@@ -45,7 +45,7 @@
 }
 
 .page-hero-lead {
-  color: oklch(0.88 0.02 264);
+  color: rgb(255 255 255 / 0.86);
   font-size: 15px;
   max-width: 560px;
   margin: 0;
@@ -54,5 +54,14 @@
 @include respond-below(sm) {
   .page-hero {
     padding: 32px $section-pad-x-sm 28px;
+  }
+}
+
+.page-hero-compact {
+  padding-top: 18px;
+  padding-bottom: 18px;
+
+  .page-breadcrumb {
+    margin-bottom: 0;
   }
 }

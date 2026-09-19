@@ -54,7 +54,7 @@
   cursor: pointer;
   border-radius: $radius-md;
   overflow: hidden;
-  background: $white;
+  background: $surface;
   border: 1px solid $border;
   min-width: 0;
 }
@@ -75,7 +75,7 @@
 }
 
 .gallery-card:hover .gallery-card-media img {
-  transform: scale(1.06);
+  transform: scale(1.03);
 }
 
 .gallery-card-body {

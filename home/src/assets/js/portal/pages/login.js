@@ -81,8 +81,7 @@ function render(portal) {
     <div class="login-page">
       <aside class="login-aside">
         <a class="login-brand" href="index.html">
-          <span class="brand-mark">OM</span>
-          <span><span class="login-brand-name">OM Academy</span><span class="login-brand-tag">LEARN · GROW · SUCCEED</span></span>
+          <img class="login-brand-logo" src="assets/img/logo-white.svg" alt="OM Academy – Skills & IT Education" width="300" height="92">
         </a>
         <div class="login-hero">
           <h1 class="login-hero-title">Your academy, <span>one sign-in away.</span></h1>

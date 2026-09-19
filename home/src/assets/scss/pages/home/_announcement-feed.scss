@@ -1,0 +1,405 @@
+@use "../../utils/variables" as *;
+@use "../../utils/mixins" as *;
+/*====== Announcements: featured banner + timeline feed ======*/
+
+.ann-feed {
+  display: grid;
+  gap: clamp(28px, 4vw, 40px);
+}
+
+// Featured banner: layered brand surface (gradient + dot texture + soft accent glow + date stamp)
+.feat {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  overflow: hidden;
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: $radius-xl;
+  background:
+    radial-gradient(circle at 92% 8%, rgb(99 102 241 / 0.14), transparent 46%),
+    linear-gradient(135deg, var(--brand-mid) 0%, var(--brand-deep) 55%, var(--navy) 100%);
+  color: $white;
+  box-shadow: $shadow-3;
+  transition: transform 0.4s $ease-out, box-shadow 0.4s;
+
+}
+
+.feat-glow {
+  position: absolute;
+  right: -60px;
+  bottom: -90px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  pointer-events: none;
+}
+
+.feat-body {
+  position: relative;
+  max-width: 640px;
+}
+
+.feat-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.feat-ribbon,
+.feat-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: $radius-pill;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.feat-ribbon {
+  background: #818cf8;
+  color: #0b1020;
+}
+
+.feat-tag {
+  background: rgb(255 255 255 / 0.14);
+  border: 1px solid rgb(255 255 255 / 0.22);
+}
+
+.feat-rel {
+  font-size: 13px;
+  color: rgb(255 255 255 / 0.86);
+}
+
+.feat-title {
+  margin: 0 0 12px;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: $white;
+}
+
+.feat-desc {
+  margin: 0 0 22px;
+  max-width: 56ch;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: rgb(255 255 255 / 0.86);
+}
+
+.feat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.feat-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: rgb(255 255 255 / 0.86);
+}
+
+.feat-stamp {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 108px;
+  padding: 16px 18px;
+  border-radius: $radius-lg;
+  background: rgb(255 255 255 / 0.1);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  backdrop-filter: blur(6px);
+  text-align: center;
+  line-height: 1;
+}
+
+.feat-day {
+  font: 800 clamp(40px, 5vw, 56px) $font-family-title;
+}
+
+.feat-mon {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #818cf8;
+}
+
+.feat-yr {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgb(255 255 255 / 0.86);
+}
+
+// Timeline: date rail | dot on the line | expandable card
+.tl {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 93px;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, $border-strong, $border-strong 88%, transparent);
+  }
+}
+
+.tl-node {
+  position: relative;
+  display: grid;
+  grid-template-columns: 64px 32px minmax(0, 1fr);
+  gap: 0 14px;
+  padding-bottom: 14px;
+}
+
+.tl-when {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: 14px;
+  line-height: 1;
+  text-align: right;
+}
+
+.tl-day {
+  font: 800 26px $font-family-title;
+  color: $ink;
+  transition: color 0.25s;
+}
+
+.tl-mon {
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: $ink-faint;
+}
+
+.tl-dot {
+  @include flex-center;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  margin-top: 8px;
+  border-radius: 50%;
+  border: 2px solid $border-strong;
+  background: $surface;
+  color: var(--tone-fg);
+  transition: background-color 0.25s, border-color 0.25s, color 0.25s, transform 0.3s $ease-out;
+}
+
+.tl-card {
+  min-width: 0;
+  border: 1px solid transparent;
+  border-radius: $radius-lg;
+  transition: background-color 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.3s $ease-out;
+
+  summary {
+    position: relative;
+    display: grid;
+    gap: 4px;
+    padding: 14px 52px 14px 16px;
+    list-style: none;
+    cursor: pointer;
+    border-radius: $radius-lg;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $accent;
+      outline-offset: 2px;
+    }
+  }
+
+  &[open] {
+    background: $surface;
+    border-color: $border;
+    box-shadow: $shadow-2;
+  }
+}
+
+.tl-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tl-tag {
+  padding: 2px 10px;
+  border-radius: $radius-pill;
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.tl-date {
+  display: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: $ink-soft;
+}
+
+.tl-rel {
+  font-size: 12.5px;
+  color: $ink-faint;
+}
+
+.tl-title {
+  font: 700 17px/1.35 $font-family-title;
+  color: $ink;
+  transition: color 0.2s;
+}
+
+.tl-excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 14px;
+  color: $ink-soft;
+}
+
+.tl-card[open] .tl-excerpt {
+  display: none;
+}
+
+.tl-chev {
+  @include flex-center;
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: $ink-faint;
+  transform: translateY(-50%);
+  transition: transform 0.3s $ease-out, background-color 0.2s, color 0.2s;
+}
+
+.tl-card[open] .tl-chev {
+  transform: translateY(-50%) rotate(180deg);
+  background: $primary-tint;
+  color: $primary;
+}
+
+.tl-detail {
+  padding: 0 16px 18px;
+
+  p {
+    margin: 0 0 12px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: $ink-soft;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tl-card[open] .tl-detail {
+    animation: tl-open 0.35s $ease-out both;
+  }
+}
+
+@keyframes tl-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+// Hover: the row shifts, the node fills with the category colour
+.tl-node:hover {
+  .tl-card:not([open]) {
+    background: $surface-alt;
+    transform: translateX(2px);
+  }
+
+  .tl-dot {
+    background: var(--tone-fg);
+    border-color: var(--tone-fg);
+    color: var(--tone-bg);
+  }
+
+  .tl-day {
+    color: $primary;
+  }
+
+  .tl-title {
+    color: $primary;
+  }
+
+  .tl-chev {
+    color: $primary;
+  }
+}
+
+@include respond-below(md) {
+  .feat {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .feat-stamp {
+    display: none;
+  }
+}
+
+@include respond-below(sm) {
+  // Rail collapses to a single line at the left; the date moves into the card header
+  .tl::before {
+    left: 15px;
+  }
+
+  .tl-node {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 0 12px;
+  }
+
+  .tl-when {
+    display: none;
+  }
+
+  .tl-dot {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .tl-card {
+    grid-column: 2;
+    grid-row: 1;
+
+    summary {
+      padding-right: 44px;
+    }
+  }
+
+  .tl-date {
+    display: inline;
+  }
+}
+
+.ann-toolbar .filter-tabs {
+  justify-content: flex-start;
+  margin-left: 0;
+}

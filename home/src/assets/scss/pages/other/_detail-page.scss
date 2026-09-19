@@ -48,7 +48,7 @@
 
 .cd-highlights {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
   margin-top: 16px;
 }
@@ -103,81 +103,6 @@
   border-radius: $radius-md;
   background: var(--tone-bg);
   color: var(--tone-fg);
-}
-
-// Related Courses sidebar
-.cd-sidebar-title {
-  @include title-font(700);
-  font-size: 15px;
-  color: $ink;
-  margin: 0 0 14px;
-}
-
-.rc-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.rc-card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 16px;
-  border: 1px solid $border;
-  border-radius: $radius-md;
-  background: $white;
-}
-
-.rc-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: $ink;
-}
-
-.rc-meta {
-  font-size: 12px;
-  color: $ink-soft;
-}
-
-.rc-link {
-  font-size: 13px;
-  font-weight: 600;
-  @include link-color(var(--tone-fg));
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 2px;
-}
-
-// Schemes index (schemes.html)
-.scheme-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 24px;
-  border: 1px solid $border;
-  border-radius: $radius-lg;
-  background: $white;
-}
-
-.scheme-short {
-  @include title-font(800);
-  font-size: 19px;
-  color: var(--tone-fg);
-}
-
-.scheme-authority {
-  font-size: 13px;
-  color: $ink-soft;
-  margin-top: -6px;
-}
-
-.scheme-summary {
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: $ink-soft;
-  flex: 1;
 }
 
 @include respond-below(md) {

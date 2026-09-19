@@ -588,7 +588,7 @@ function printSheet(title, subtitle, summary, sections) {
   return html`
     <div class="print-sheet">
       <div class="print-head">
-        <div class="print-brand"><span class="print-mark">OM</span><div><div class="print-org">${inst.name}</div>${inst.address ? html`<div class="print-org-sub">${inst.address}</div>` : raw("")}</div></div>
+        <div class="print-brand"><img class="print-mark" src="assets/img/logo-mark.svg" alt=""><div><div class="print-org">${inst.name}</div>${inst.address ? html`<div class="print-org-sub">${inst.address}</div>` : raw("")}</div></div>
         <div class="print-doc"><div class="print-doc-title">${title}</div><div class="print-meta">${subtitle}</div><div class="print-meta">Generated ${dateTime(nowISO())} by ${ctx.user.name}</div></div>
       </div>
       <table class="print-table"><tbody>${raw(summary.map(([k, v]) => html`<tr><th>${k}</th><td>${v}</td></tr>`).join(""))}</tbody></table>

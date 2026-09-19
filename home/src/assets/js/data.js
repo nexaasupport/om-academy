@@ -13,11 +13,16 @@ export const WHATSAPP_UPDATES_TEXT = "Hi OM Academy, please send me updates on n
 // Announcements, newest first; the first match is pinned as the latest notice.
 // tag must be IMPORTANT, NOTICE, UPDATE or SCHOLARSHIP to appear under a filter; date is "DD Mon YYYY".
 export const announcements = [
-  { tag: "IMPORTANT", date: "23 Aug 2026", title: "Skill Assistant Fellowship in Advanced IT Learning (SAFAL) Scheme", desc: "Haryana Government is offering a 75% scholarship on course fee for eligible students under the SAFAL scheme. Apply before the last date." },
-  { tag: "IMPORTANT", date: "20 May 2026", title: "New Batches Starting Soon!", desc: "Admissions open for various skill development courses. Secure your seat now." },
+  { tag: "IMPORTANT", date: "23 Aug 2026", time: "10:00 AM", image: "1541339907198-e08756dedf3f", title: "Skill Assistant Fellowship in Advanced IT Learning (SAFAL) Scheme", desc: "Haryana Government is offering a 75% scholarship on course fee for eligible students under the SAFAL scheme. Apply before the last date." },
+  { tag: "IMPORTANT", date: "20 May 2026", time: "9:30 AM", title: "New Batches Starting Soon!", desc: "Admissions open for various skill development courses. Secure your seat now." },
   { tag: "UPDATE", date: "18 May 2026", title: "Document Verification Drive", desc: "Document verification at all OM Academy centers from 20 May 2026." },
   { tag: "SCHOLARSHIP", date: "15 May 2026", title: "Scholarship Opportunity", desc: "Eligibility-based scholarship available for eligible students. Apply now." },
   { tag: "NOTICE", date: "12 May 2026", title: "Holiday Notice", desc: "All OM Academy centers will remain closed on 15 May 2026 (Friday)." },
+  { tag: "UPDATE", date: "08 May 2026", title: "Computer Lab Timings Revised", desc: "Lab practice slots have been updated for all NIELIT and HKCL batches." },
+  { tag: "SCHOLARSHIP", date: "05 May 2026", title: "HKCL Merit Scholarship Applications Open", desc: "Meritorious students of HS-CIT can apply for fee concession this term." },
+  { tag: "NOTICE", date: "02 May 2026", title: "Exam Form Submission", desc: "Students appearing in the upcoming NIELIT examination must submit exam forms at their centre." },
+  { tag: "IMPORTANT", date: "28 Apr 2026", title: "Placement Drive Registration", desc: "Register for the campus placement drive with an updated resume at the front desk." },
+  { tag: "UPDATE", date: "22 Apr 2026", title: "New Course: Digital Marketing Fundamentals", desc: "A new short-term digital marketing course is now open for admission." },
 ];
 
 export const announcementFilters = ["All", "Important", "Notice", "Update", "Scholarship"];
@@ -43,6 +48,14 @@ export const galleryItems = [
   { title: "Spoken English Class", tag: "TRAINING", group: "Training Sessions", tone: "green", photo: "1522202176988-66273c2fd55f" },
   { title: "Web Development Workshop", tag: "WORKSHOP", group: "Workshops", tone: "blue", photo: "1522071820081-009f0129c71c" },
   { title: "Hardware & Networking Lab", tag: "TRAINING", group: "Training Sessions", tone: "green", photo: "1544197150-b99a580bb7a8" },
+  { title: "Career Counselling Session", tag: "EVENT", group: "Events", tone: "purple", photo: "1519389950473-47ba0277781c" },
+  { title: "Retail Skills Workshop", tag: "WORKSHOP", group: "Workshops", tone: "blue", photo: "1556742049-0cfed4f6a45d" },
+  { title: "Hospitality Training Lab", tag: "TRAINING", group: "Training Sessions", tone: "green", photo: "1577219491135-ce391730fb2c" },
+  { title: "Placement Interview Round", tag: "PLACEMENT", group: "Placements", tone: "amber", photo: "1600880292203-757bb62b4baf" },
+  { title: "Front Office Practical", tag: "TRAINING", group: "Training Sessions", tone: "green", photo: "1414235077428-338989a2e8c0" },
+  { title: "Tally & GST Workshop", tag: "WORKSHOP", group: "Workshops", tone: "blue", photo: "1581092918056-0c4c3acd3789" },
+  { title: "Health & Safety Training", tag: "TRAINING", group: "Training Sessions", tone: "green", photo: "1576091160399-112ba8d25d1d" },
+  { title: "Annual Day Celebration", tag: "EVENT", group: "Events", tone: "purple", photo: "1541339907198-e08756dedf3f" },
 ].map((item, index) => Object.assign({}, item, { index }, item.photo
   ? { caption: "Representative photo", full: unsplash(item.photo, 1400, 75), card: unsplash(item.photo, 600, 60), thumb: unsplash(item.photo, 200, 60) }
   : {}));
@@ -96,42 +109,86 @@ export const courses = [
   },
 ];
 
-// Government schemes shown on schemes.html (index) and scheme-details.html (?scheme=<slug>).
-// Distinct from the "awarding body" categories above (NIELIT/HARTRON/HKCL/etc.).
+// Government schemes shown on the homepage, schemes.html and scheme-details.html (?scheme=<slug>).
+// Distinct from the "awarding body" categories above (NIELIT/HARTRON/HKCL/etc.). Batch dates, eligibility and
+// scheme details are unverified placeholders until the owner confirms them.
 export const schemes = [
   {
     slug: "ddu-gky", short: "DDU-GKY", tone: "purple", tag: "Rural Youth | Better Career",
     name: "Deen Dayal Upadhyaya Grameen Kaushalya Yojana", authority: "Ministry of Rural Development, Government of India",
     summary: "A placement-linked skill development programme for rural youth, offering free training, stipend support and industry-approved courses.",
+    photo: "1522071820081-009f0129c71c",
     highlights: ["Ministry of Rural Development", "Free Quality Training", "Stipend & Placement Support", "Industry Approved Courses"],
+    tiles: [["Government Initiative", "Supported by the Ministry of Rural Development"], ["Rural Youth Focus", "Training for youth from rural households"], ["Skill-Based Training", "Practical and industry-relevant training"], ["Employment Focused", "Placement-linked programme"]],
     eligibility: ["Indian citizen", "Rural youth, age 15–35 years", "Poor household as per SECC data"],
-    courses: ["Retail & Customer Care", "Hospitality Assistant", "IT & Digital Skills", "Healthcare Assistant"],
+    careerCourses: [
+      { name: "Retail & Customer Care", desc: "Sales floor, billing and customer handling skills.", tone: "purple", photo: "1556742049-0cfed4f6a45d" },
+      { name: "Hospitality Assistant", desc: "Guest service and basic hospitality operations.", tone: "green", photo: "1414235077428-338989a2e8c0" },
+      { name: "IT & Digital Skills", desc: "Computer basics, office tools and digital services.", tone: "blue", photo: "1522071820081-009f0129c71c" },
+      { name: "Healthcare Assistant", desc: "Patient care basics and clinic support skills.", tone: "rust", photo: "1576091160399-112ba8d25d1d" },
+    ],
+    batches: [["Retail & Customer Care", "10 Mar 2026", "15 Apr 2026", "20 May 2026", "25 Jun 2026", "Available"], ["Hospitality Assistant", "12 Mar 2026", "18 Apr 2026", "22 May 2026", "28 Jun 2026", "Available"], ["IT & Digital Skills", "15 Mar 2026", "20 Apr 2026", "25 May 2026", "30 Jun 2026", "Upcoming"]],
   },
   {
     slug: "pmkvy", short: "PMKVY", tone: "amber", tag: "Skill. Employ. Empower.",
     name: "Pradhan Mantri Kaushal Vikas Yojana", authority: "Ministry of Skill Development & Entrepreneurship, Government of India",
     summary: "India's flagship skill certification scheme, offering short-term training and monetary reward on successful assessment and certification.",
+    photo: "1600880292203-757bb62b4baf",
     highlights: ["Ministry of Skill Development", "Short Term Skill Training", "Industry Relevant Courses", "Certification by Govt. of India"],
+    tiles: [["Government Initiative", "Ministry of Skill Development & Entrepreneurship"], ["Short-Term Training", "Quick, job-focused courses"], ["Skill-Based Training", "Practical and industry-relevant training"], ["Certification", "Certified by Government of India"]],
     eligibility: ["Indian citizen", "Unemployed or school/college dropout", "Minimum age 18 years"],
-    courses: ["IT & Digital Skills", "Retail & Customer Care", "Beauty & Wellness", "Construction & Electric"],
+    careerCourses: [
+      { name: "IT & Digital Skills", desc: "Computer operation and digital literacy.", tone: "blue", photo: "1522071820081-009f0129c71c" },
+      { name: "Retail & Customer Care", desc: "Retail operations and service skills.", tone: "amber", photo: "1556742049-0cfed4f6a45d" },
+      { name: "Beauty & Wellness", desc: "Salon skills and personal care services.", tone: "purple", photo: "1560066984-138dadb4c035" },
+      { name: "Construction & Electric", desc: "Site safety and basic electrical work.", tone: "rust", photo: "1504307651254-35680f356dfd" },
+    ],
+    batches: [["IT & Digital Skills", "10 Mar 2026", "15 Apr 2026", "20 May 2026", "25 Jun 2026", "Available"], ["Retail & Customer Care", "12 Mar 2026", "18 Apr 2026", "22 May 2026", "28 Jun 2026", "Available"], ["Beauty & Wellness", "15 Mar 2026", "20 Apr 2026", "25 May 2026", "30 Jun 2026", "Upcoming"]],
   },
   {
     slug: "hsrt", short: "HSRT", tone: "green", tag: "Hospitality Skills for a Bright Career",
     name: "Hunnar Se Rozgar Tak", authority: "Ministry of Tourism, Government of India",
-    summary: "A skill development initiative focused on creating employment opportunities for youth through practical training in the hospitality sector.",
+    summary: "Hunnar Se Rozgar Tak (HSRT) is a skill development initiative by the Ministry of Tourism, Government of India, focused on creating employment opportunities for youth through practical training in the hospitality sector.",
+    photo: "1577219491135-ce391730fb2c",
     highlights: ["Hospitality & Tourism Sector", "Practical Hands-on Training", "Industry Exposure", "Job-oriented Programmes"],
-    eligibility: ["Indian citizen", "Minimum age 18 years", "10th pass or above"],
-    courses: ["Multi Cuisine Cook", "Front Office Associate", "F&B Service – Steward", "Room Attendant"],
+    tiles: [["Government Initiative", "Supported by Ministry of Tourism, Govt. of India"], ["Hospitality Sector", "Focus on tourism & hospitality industry"], ["Skill-Based Training", "Practical and industry-relevant training"], ["Employment Focused", "Build skills for a better future"]],
+    eligibility: ["Indian citizen", "Minimum age 18 years (as per scheme guidelines)", "Educational qualification: 10th pass or above (as per course requirements)"],
+    careerCourses: [
+      { name: "Multi Cuisine Cook", desc: "Professional food preparation, kitchen operations and culinary skills.", tone: "rust", photo: "1577219491135-ce391730fb2c" },
+      { name: "Front Office Associate", desc: "Guest handling, reception, reservations and front-office operations.", tone: "blue", photo: "1414235077428-338989a2e8c0" },
+      { name: "F&B Service – Steward", desc: "Food & beverage service and guest management.", tone: "green", photo: "1551434678-e076c223a692" },
+      { name: "Room Attendant", desc: "Housekeeping operations, room servicing and hospitality standards.", tone: "purple", photo: "1519389950473-47ba0277781c" },
+    ],
+    batches: [["Multi Cuisine Cook", "10 Mar 2026", "15 Apr 2026", "20 May 2026", "25 Jun 2026", "Available"], ["Front Office Associate", "12 Mar 2026", "18 Apr 2026", "22 May 2026", "28 Jun 2026", "Available"], ["F&B Service – Steward", "15 Mar 2026", "20 Apr 2026", "25 May 2026", "30 Jun 2026", "Upcoming"], ["Room Attendant", "18 Mar 2026", "24 Apr 2026", "29 May 2026", "05 Jul 2026", "Upcoming"]],
   },
   {
     slug: "other-skill", short: "Other Skill Courses", tone: "blue", tag: "Learn New Skills. Build Your Future.",
     name: "Other Skill Development Courses", authority: "OM Academy, industry-oriented short courses",
     summary: "Short-term, customized courses across multiple industry domains for students who don't fall under a specific government scheme.",
+    photo: "1544197150-b99a580bb7a8",
     highlights: ["Short Term / Customized Courses", "Multiple Industry Domains", "Practical & Job-focused Training", "Certification Support"],
+    tiles: [["Flexible Duration", "Short-term and customized courses"], ["Multiple Domains", "IT, marketing, accounting and more"], ["Skill-Based Training", "Practical and job-focused"], ["Certification Support", "Guidance for recognized certificates"]],
     eligibility: ["Open to all students, no scheme-specific eligibility"],
-    courses: ["Digital Marketing Fundamentals", "Web Designing with HTML & CSS", "Tally + GST"],
+    careerCourses: [
+      { name: "Digital Marketing Fundamentals", desc: "SEO, social media and online advertising.", tone: "amber", photo: "1657812670261-7b76ba04525c" },
+      { name: "Web Designing with HTML & CSS", desc: "Build responsive websites from scratch.", tone: "blue", photo: "1522071820081-009f0129c71c" },
+      { name: "Tally + GST", desc: "Accounting and GST compliance on Tally.", tone: "rust", photo: "1581092918056-0c4c3acd3789" },
+    ],
+    batches: [["Digital Marketing Fundamentals", "10 Mar 2026", "15 Apr 2026", "20 May 2026", "25 Jun 2026", "Available"], ["Web Designing with HTML & CSS", "12 Mar 2026", "18 Apr 2026", "22 May 2026", "28 Jun 2026", "Available"], ["Tally + GST", "15 Mar 2026", "20 Apr 2026", "25 May 2026", "30 Jun 2026", "Upcoming"]],
   },
 ];
+
+// "Popular Job Roles & Training Domains" tiles on the homepage.
+export const jobRoles = [
+  { title: "Hospitality & Tourism", icon: "chef", blurb: "Cook, front office, F&B service and housekeeping careers.", tags: ["Multi Cuisine Cook", "Front Office", "Steward"], href: "scheme-details.html?scheme=hsrt", photo: "1577219491135-ce391730fb2c" },
+  { title: "IT & Digital Skills", icon: "monitor", blurb: "CCC, HS-CIT and web skills for office and digital jobs.", href: "course-details.html?course=ccc-plus", photo: "1522071820081-009f0129c71c" },
+  { title: "Retail & Customer Care", icon: "bag", blurb: "Sales floor, billing and service roles.", href: "scheme-details.html?scheme=pmkvy", photo: "1556742049-0cfed4f6a45d" },
+  { title: "Healthcare", icon: "pulse", blurb: "Patient care and clinic support assistants.", href: "scheme-details.html?scheme=ddu-gky", photo: "1576091160399-112ba8d25d1d" },
+  { title: "Beauty & Wellness", icon: "sparkle", blurb: "Salon, spa and personal care services.", href: "scheme-details.html?scheme=pmkvy", photo: "1560066984-138dadb4c035" },
+  { title: "Construction & Electric", icon: "wrench", blurb: "Site safety, wiring and technician roles.", href: "scheme-details.html?scheme=pmkvy", photo: "1504307651254-35680f356dfd" },
+];
+
+export const stockPhoto = (id, width = 600, quality = 60) => "https://images.unsplash.com/photo-" + id + "?auto=format&fit=crop&w=" + width + "&q=" + quality;
 
 // Important dates shown on the homepage Announcements panel and on important-dates.html.
 // date is "DD Mon YYYY" (same format as announcements); category groups the filters/calendar dots.

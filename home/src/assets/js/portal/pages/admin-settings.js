@@ -288,7 +288,7 @@ function paintInstPreview() {
   const el = qs("[data-inst-preview]", ctx.root);
   if (!el) return;
   const i = settings().institution || {};
-  el.innerHTML = html`<div class="set-doc-head"><span class="print-mark">OM</span><div><div class="fw-700 text-title">${i.name || "—"}</div><div class="text-sm text-muted">${i.address || ""}</div><div class="text-sm text-muted">${[i.phone, i.email].filter(Boolean).join(" · ")}${i.gstin ? " · GSTIN " + i.gstin : ""}</div></div></div>
+  el.innerHTML = html`<div class="set-doc-head"><img class="print-mark" src="assets/img/logo-mark.svg" alt=""><div><div class="fw-700 text-title">${i.name || "—"}</div><div class="text-sm text-muted">${i.address || ""}</div><div class="text-sm text-muted">${[i.phone, i.email].filter(Boolean).join(" · ")}${i.gstin ? " · GSTIN " + i.gstin : ""}</div></div></div>
     ${(i.affiliations || []).length ? html`<div class="cluster section-gap">${raw(i.affiliations.map((a) => html`<span class="chip">${a}</span>`).join(""))}</div>` : raw("")}`;
 }
 

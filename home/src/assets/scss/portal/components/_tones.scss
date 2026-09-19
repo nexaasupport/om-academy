@@ -7,23 +7,23 @@
 // Keys are quoted so Sass doesn't read blue/green/purple/navy as colour values.
 
 $tones-light: (
-  "blue": oklch(0.5 0.16 255),
-  "green": oklch(0.52 0.14 150),
-  "amber": oklch(0.58 0.14 65),
-  "rust": oklch(0.54 0.18 30),
-  "purple": oklch(0.5 0.17 300),
-  "navy": oklch(0.42 0.15 265),
-  "slate": oklch(0.52 0.02 264),
+  "blue": #4338ca,
+  "green": #047857,
+  "amber": #92400e,
+  "rust": #be123c,
+  "purple": #0369a1,
+  "navy": #0f766e,
+  "slate": #475569,
 );
 
 $tones-dark: (
-  "blue": oklch(0.74 0.12 255),
-  "green": oklch(0.76 0.13 150),
-  "amber": oklch(0.8 0.12 75),
-  "rust": oklch(0.74 0.14 30),
-  "purple": oklch(0.76 0.12 300),
-  "navy": oklch(0.72 0.11 265),
-  "slate": oklch(0.74 0.02 264),
+  "blue": #a5b4fc,
+  "green": #6ee7b7,
+  "amber": #fcd34d,
+  "rust": #fda4af,
+  "purple": #7dd3fc,
+  "navy": #5eead4,
+  "slate": #b4c0d3,
 );
 
 @each $name, $color in $tones-light {

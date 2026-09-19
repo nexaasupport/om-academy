@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    @@include('partials/title-meta.html', {"title": "Course Details | OM Academy"})
+
+    @@include('partials/header.html', {"page": "course-details"})
+
+</head>
+
+<body>
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Start Main Wrapper -->
+    <div class="main-wrapper">
+
+        @@include('partials/topbar.html', {"page": "course-details", "sec": "index.html#"})
+
+        <main id="main" tabindex="-1">
+
+            <section class="page-hero page-hero-compact">
+                <div class="page-hero-inner">
+                    <nav class="page-breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><a href="index.html#courses">Courses</a><span aria-hidden="true">/</span><span aria-current="page">Course Details</span></nav>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="cd-layout">
+                    <div data-course-detail></div>
+                    <aside>
+                        <h2 class="cd-sidebar-title">Related Courses</h2>
+                        <div class="rc-list" data-related-courses></div>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- #enquire target: the enquiry form itself is the modal in partials/enquiry-modal.html -->
+            <div id="enquire"></div>
+
+        </main>
+
+        @@include('partials/footer.html', {"sec": "index.html#"})
+
+    </div>
+    <!-- End Main Wrapper -->
+
+    @@include('partials/enquiry-modal.html')
+
+    @@include('partials/announcement-modal.html', {"auto": "yes"})
+
+    @@include('partials/script.html', {"page": "course-details"})
+
+</body>
+
+</html>

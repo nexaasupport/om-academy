@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 88" role="img" aria-label="OM Academy">
+  <title>OM Academy</title>
+  <defs><linearGradient id="om-body-w" x1="0.9" y1="0" x2="0.1" y2="1"><stop offset="0" stop-color="#e0e7ff"/><stop offset="1" stop-color="#a5b4fc"/></linearGradient></defs>
+  <path d="M36 40H10a7 7 0 0 0-7 7v24a7 7 0 0 0 7 7h44a7 7 0 0 0 7-7V52" fill="none" stroke="#ffffff" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M28 78h10v3.6H28z" fill="#ffffff"/>
+  <path d="M17 82h32l3 5H14z" fill="#ffffff"/>
+  <path d="M33 33c9 1 15.5-5.5 17.5-21 3.6 9.6.8 23-10 33C32 55 22 63 11 68.5 14.5 58 21 48.5 27.5 41.5c-2-3.5-.5-8.2 5.5-8.5z" fill="url(#om-body-w)"/>
+  <circle cx="33.5" cy="23.5" r="8.6" fill="#ffffff"/>
+  <g transform="rotate(-24 27 11)">
+    <path d="M13 11.2L28 4l14.5 7.2L28 18.4z" fill="#c7d2fe"/>
+    <path d="M20 15v4.6c0 1.6 3.6 3 8 3s8-1.4 8-3V15l-8 3.8z" fill="#c7d2fe"/>
+  </g>
+  <path d="M14.5 13.8L11.4 25" stroke="#c7d2fe" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  <circle cx="11.2" cy="26.6" r="2" fill="#c7d2fe"/>
+</svg>

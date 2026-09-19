@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    @@include('partials/title-meta.html', {"title": "Scheme Details | OM Academy"})
+
+    @@include('partials/header.html', {"page": "schemes"})
+
+</head>
+
+<body>
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Start Main Wrapper -->
+    <div class="main-wrapper">
+
+        @@include('partials/topbar.html', {"page": "schemes", "sec": "index.html#"})
+
+        <main id="main" tabindex="-1">
+
+            <section class="page-hero page-hero-compact">
+                <div class="page-hero-inner">
+                    <nav class="page-breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><a href="schemes.html">Schemes</a><span aria-hidden="true">/</span><span aria-current="page">Details</span></nav>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="scheme-detail-wrap" data-scheme-detail></div>
+            </section>
+
+            <!-- #enquire target: the enquiry form itself is the modal in partials/enquiry-modal.html -->
+            <div id="enquire"></div>
+
+        </main>
+
+        @@include('partials/footer.html', {"sec": "index.html#"})
+
+    </div>
+    <!-- End Main Wrapper -->
+
+    @@include('partials/enquiry-modal.html')
+
+    @@include('partials/announcement-modal.html', {"auto": "yes"})
+
+    @@include('partials/script.html', {"page": "scheme-details"})
+
+</body>
+
+</html>

@@ -13,8 +13,8 @@
   border-bottom: 1px solid var(--border);
 
   .segmented button[aria-pressed="true"] {
-    background: var(--primary);
-    color: #fff;
+    background: var(--primary-fill);
+    color: var(--primary-contrast);
   }
 }
 

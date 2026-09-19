@@ -24,7 +24,7 @@ function docHead(title, metaHtml = "") {
   return html`
     <div class="print-head">
       <div class="print-brand">
-        <span class="print-mark">OM</span>
+        <img class="print-mark" src="assets/img/logo-mark.svg" alt="">
         <div>
           <div class="print-org">${inst.name}</div>
           ${inst.address ? html`<div class="print-org-sub">${inst.address}</div>` : raw("")}

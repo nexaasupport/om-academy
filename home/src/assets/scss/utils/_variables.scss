@@ -1,77 +1,218 @@
 /*============================
-  1. Variables
+  1. Design tokens: the one approved colour system
 ============================*/
 
 // Font Family
 $font-family-title: "Poppins", sans-serif;
 $font-family-primary: "Inter", sans-serif;
 
-// Brand tokens. Solid brand backgrounds use --primary-gradient; text, borders and icons use --primary.
+// Approved palette (derived from the hero):
+//   Primary #4F46E5 · Primary Dark #3730A3 · Accent #6366f1 · Deep Navy #0B1020
+//   Background #F8FAFC · Surface #FFFFFF · Text #111827 · Secondary text #64748B · Border #E2E8F0
+//   Success #10B981 · Warning #F59E0B · Error #EF4444
+// Dark: bg #080D1A · surface #0F172A · elevated #151E32 · border #25304A · primary #6366F1 · accent #818cf8
+// Anything else is a tint/alpha of these, or a text-safe status shade (documented below).
 :root {
-  --ink: oklch(0.2 0.03 264);
-  --ink-soft: oklch(0.5 0.02 264);
-  --primary: oklch(0.42 0.15 265);
-  --primary-dark: oklch(0.32 0.12 265);
-  --primary-gradient: linear-gradient(165deg, oklch(0.42 0.15 265) 0%, oklch(0.32 0.12 265) 100%);
-  --primary-tint: oklch(0.95 0.028 265);
-  --primary-bg: oklch(0.965 0.015 265);
-  --gold: oklch(0.5 0.16 40);
-  --accent: oklch(0.72 0.19 150);
+  color-scheme: light;
+
+  // Text
+  --ink: #111827;
+  --ink-soft: #475569; // body copy (slate step between text and secondary text)
+  --ink-faint: #64748b; // secondary / muted text
+
+  // Brand
+  --primary: #4f46e5;
+  --primary-ink: #4f46e5; // text/icons on light surfaces (6.3:1 on white)
+  --primary-dark: #3730a3;
+  --on-primary: #ffffff;
+  --primary-gradient: linear-gradient(160deg, #4f46e5 0%, #3730a3 100%);
+  --brand-band: linear-gradient(160deg, #3730a3 0%, #0b1020 100%);
+  --primary-tint: #eef2ff; // primary at ~8% on surface
+  --primary-bg: #f1f2ff;
+  --accent: #6366f1;
+  --accent-strong: #4338ca; // text-safe accent on light
+  --accent-tint: #eef2ff;
+  --gold: #b45309;
+  --navy: #0b1020;
+  --brand-deep: #3730a3;
+  --brand-mid: #4f46e5;
+
+  // Surfaces: page < band < card
+  --page-bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-alt: #f1f5f9;
+  --surface-soft: #f8fafc;
+  --chip-bg: #f1f5f9;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --border-soft: #edf1f7;
+  --border-input: #cbd5e1;
+  --icon-muted: #94a3b8;
+  --header-bg: rgb(255 255 255 / 0.86);
+
+  // Depth: navy-tinted neutral elevation
+  --shadow-color: #0b1020;
+  --shadow-1: 0 1px 2px rgb(11 16 32 / 0.06);
+  --shadow-2: 0 1px 2px rgb(11 16 32 / 0.05), 0 6px 16px -8px rgb(11 16 32 / 0.14);
+  --shadow-3: 0 2px 4px rgb(11 16 32 / 0.05), 0 18px 36px -18px rgb(11 16 32 / 0.26);
+  --overlay: rgb(11 16 32 / 0.55);
+  --img-filter: none;
+
+  // Atmospheric glow (backgrounds only) and button elevation, both from the brand hues
+  --glow-a: rgb(99 102 241 / 0.1);
+  --glow-b: rgb(79 70 229 / 0.08);
+  --btn-shadow: 0 1px 0 rgb(255 255 255 / 0.18) inset, 0 4px 10px -6px rgb(79 70 229 / 0.45);
+  --btn-shadow-hover: 0 1px 0 rgb(255 255 255 / 0.18) inset, 0 6px 14px -8px rgb(79 70 229 / 0.5);
+
+  // Status: fills are the approved hues; text tones are darkened only as needed for AA
+  --success: #047857;
+  --success-fill: #10b981;
+  --success-bg: #d1fae5;
+  --warning: #b45309;
+  --warning-fill: #f59e0b;
+  --warning-bg: #fef3c7;
+  --danger: #b91c1c;
+  --danger-fill: #ef4444;
+  --danger-bg: #fee2e2;
+  --info: #4338ca;
+  --info-bg: #eef2ff;
+
+  // Layout: 1200px content, gutters scale with the viewport, sections centre their content inside --pad-x
+  --container: 1200px;
+  --gutter: clamp(20px, 4vw, 40px);
+  --pad-x: max(var(--gutter), calc((100% - var(--container)) / 2));
+  --section-y: clamp(56px, 8vw, 96px);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-// Theme Colors Variables
+// Dedicated dark palette (not an inversion)
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --ink: #f8fafc;
+  --ink-soft: #b4c0d3;
+  --ink-faint: #94a3b8;
+
+  --primary: #5f62ee;
+  --primary-ink: #a5b4fc; // text/icons on dark surfaces
+  --primary-dark: #818cf8;
+  --on-primary: #ffffff;
+  --primary-gradient: linear-gradient(160deg, #4f46e5 0%, #3730a3 100%);
+  --brand-band: linear-gradient(160deg, #3730a3 0%, #0b1020 100%);
+  --primary-tint: #1a2148;
+  --primary-bg: #111936;
+  --accent: #818cf8;
+  --accent-strong: #c7d2fe;
+  --accent-tint: #1a2148;
+  --gold: #fbbf24;
+
+  --page-bg: #080d1a;
+  --surface: #0f172a;
+  --surface-alt: #0b1224;
+  --surface-soft: #151e32; // elevated surface
+  --chip-bg: #151e32;
+  --border: #25304a;
+  --border-strong: #344160;
+  --border-soft: #1c2740;
+  --border-input: #3a4869;
+  --icon-muted: #7c8aa5;
+  --header-bg: rgb(8 13 26 / 0.82);
+
+  --shadow-color: #000000;
+  --shadow-1: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-2: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 8px 20px -12px rgb(0 0 0 / 0.65);
+  --shadow-3: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 20px 40px -20px rgb(0 0 0 / 0.75);
+  --overlay: rgb(3 6 14 / 0.72);
+  --img-filter: brightness(0.9) contrast(1.03);
+
+  --glow-a: rgb(129 140 248 / 0.14);
+  --glow-b: rgb(99 102 241 / 0.14);
+  --btn-shadow: 0 1px 0 rgb(255 255 255 / 0.16) inset, 0 3px 8px -4px rgb(0 0 0 / 0.55);
+  --btn-shadow-hover: 0 1px 0 rgb(255 255 255 / 0.16) inset, 0 5px 12px -6px rgb(0 0 0 / 0.6);
+
+  --success: #34d399;
+  --success-bg: #0f2e26;
+  --warning: #fbbf24;
+  --warning-bg: #33280d;
+  --danger: #f87171;
+  --danger-bg: #351616;
+  --info: #a5b4fc;
+  --info-bg: #1a2148;
+}
+
+// Sass aliases (components read the CSS variables above)
 $ink: var(--ink);
 $ink-soft: var(--ink-soft);
-$primary: var(--primary);
+$ink-faint: var(--ink-faint);
+$primary: var(--primary-ink); // text / icon colour on surfaces (contrast-safe)
+$primary-fill: var(--primary); // brand fill: buttons, active states
+$on-primary: var(--on-primary);
 $primary-dark: var(--primary-dark);
 $primary-gradient: var(--primary-gradient);
+$brand-band: var(--brand-band);
 $primary-tint: var(--primary-tint);
 $primary-bg: var(--primary-bg);
-$gold: var(--gold);
 $accent: var(--accent);
-$white: white;
+$accent-strong: var(--accent-strong);
+$accent-tint: var(--accent-tint);
+$on-accent: var(--on-primary);
+$gold: var(--gold);
+$white: white; // true white: text/icons on brand or photo bands
+$surface: var(--surface); // card / panel backgrounds
 
-// Neutrals (warm hue 90 for surfaces, brand hue 264 for tinted neutrals)
-$page-bg: oklch(0.99 0.002 90);
-$surface-alt: oklch(0.97 0.004 90);
-$surface-soft: oklch(0.985 0.003 90);
-$chip-bg: oklch(0.96 0.004 90);
-$border: oklch(0.91 0.006 90);
-$border-strong: oklch(0.9 0.006 90);
-$border-soft: oklch(0.93 0.006 90);
-$border-input: oklch(0.87 0.006 90);
-$icon-muted: oklch(0.65 0.006 90);
-$success: oklch(0.42 0.14 150);
-$danger: oklch(0.58 0.2 25);
-$highlight: oklch(0.78 0.16 90);
-$footer-bg: oklch(0.21 0.06 265);
+$page-bg: var(--page-bg);
+$surface-alt: var(--surface-alt);
+$surface-soft: var(--surface-soft);
+$chip-bg: var(--chip-bg);
+$border: var(--border);
+$border-strong: var(--border-strong);
+$border-soft: var(--border-soft);
+$border-input: var(--border-input);
+$icon-muted: var(--icon-muted);
+$success: var(--success);
+$danger: var(--danger);
+$highlight: #fbbf24;
+$footer-bg: #0b1020;
 
-// Radius
+// Radius scale
 $radius-sm: 8px;
-$radius: 10px;
+$radius: 12px;
 $radius-md: 12px;
-$radius-lg: 14px;
-$radius-xl: 18px;
+$radius-lg: 16px;
+$radius-xl: 24px;
 $radius-pill: 100px;
 
 // Shadows
-$shadow-card-hover: 0 20px 40px -20px oklch(0.2 0.05 264 / 0.4);
-$shadow-primary: 0 12px 24px -10px oklch(0.42 0.15 265 / 0.5);
+$shadow-1: var(--shadow-1);
+$shadow-2: var(--shadow-2);
+$shadow-3: var(--shadow-3);
+$shadow-card-hover: var(--shadow-2);
+$shadow-primary: var(--btn-shadow);
+$btn-shadow-hover: var(--btn-shadow-hover);
 
 // Layout
-$container-max: 1440px;
-$section-pad-y: 56px;
-$section-pad-x: 32px;
-$section-pad-x-sm: 20px;
+$container-max: 1280px;
+$section-pad-y: var(--section-y);
+$section-pad-x: var(--pad-x);
+$section-pad-x-sm: var(--gutter);
+$ease-out: var(--ease-out);
 
-// Tone pairs (tint background, strong foreground) shared by course cards, badges, notices and photo tags.
-// Components read them through the .tone-* classes (components/_tones.scss) as --tone-bg / --tone-fg.
-// Keys are quoted so Sass doesn't read blue/green/purple/navy as colour values.
+// Icon / label colour set (from the docx mockups): indigo, emerald, amber, rose, sky, teal.
+// Each is a tint background + a strong foreground (AA on the tint), used by .tone-* classes.
 $tones: (
-  "blue": (bg: oklch(0.94 0.03 255), fg: oklch(0.4 0.16 255)),
-  "green": (bg: oklch(0.94 0.04 150), fg: oklch(0.42 0.14 150)),
-  "purple": (bg: oklch(0.94 0.03 300), fg: oklch(0.42 0.14 300)),
-  "navy": (bg: oklch(0.94 0.03 265), fg: oklch(0.38 0.12 265)),
-  "amber": (bg: oklch(0.95 0.04 60), fg: oklch(0.5 0.16 40)),
-  "rust": (bg: oklch(0.94 0.03 30), fg: oklch(0.48 0.15 30)),
+  "blue": (bg: #eef2ff, fg: #4338ca),
+  "green": (bg: #d1fae5, fg: #047857),
+  "purple": (bg: #e0f2fe, fg: #0369a1),
+  "navy": (bg: #ccfbf1, fg: #0f766e),
+  "amber": (bg: #fef3c7, fg: #92400e),
+  "rust": (bg: #ffe4e6, fg: #be123c),
+);
+
+$tones-dark: (
+  "blue": (bg: #1a2148, fg: #a5b4fc),
+  "green": (bg: #0f2e26, fg: #6ee7b7),
+  "purple": (bg: #0c2a3d, fg: #7dd3fc),
+  "navy": (bg: #0d2f2c, fg: #5eead4),
+  "amber": (bg: #33280d, fg: #fcd34d),
+  "rust": (bg: #3a1620, fg: #fda4af),
 );

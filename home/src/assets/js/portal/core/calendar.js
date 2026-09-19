@@ -5,12 +5,12 @@ Description  : FullCalendar wrapper (month + list views; timeGridWeek for the st
 */
 
 const EVENT_TONES = {
-  holiday: { bg: "#fde7e7", border: "#c23a3a", text: "#7a2323" },
-  event: { bg: "#e8edfa", border: "#23459d", text: "#1a3475" },
-  exam: { bg: "#fbeedd", border: "#b3781b", text: "#7a501a" },
-  deadline: { bg: "#f1e8fb", border: "#7a4fc9", text: "#4e2f8c" },
-  class: { bg: "#e6f6ed", border: "#1f9d55", text: "#155c33" },
-  cancellation: { bg: "#eceef1", border: "#64748b", text: "#3a4250" },
+  holiday: { bg: "#fee2e2", border: "#ef4444", text: "#b91c1c" },
+  event: { bg: "#eef2ff", border: "#4f46e5", text: "#3730a3" },
+  exam: { bg: "#fef3c7", border: "#f59e0b", text: "#92400e" },
+  deadline: { bg: "#eef2ff", border: "#6366f1", text: "#4338ca" },
+  class: { bg: "#d1fae5", border: "#10b981", text: "#047857" },
+  cancellation: { bg: "#f1f5f9", border: "#64748b", text: "#475569" },
 };
 
 export const toneForType = (type) => EVENT_TONES[type] || EVENT_TONES.event;

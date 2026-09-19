@@ -11,3 +11,12 @@
     --tone-fg: #{map.get($tone, fg)};
   }
 }
+
+:root[data-theme="dark"] {
+  @each $name, $tone in $tones-dark {
+    .tone-#{$name} {
+      --tone-bg: #{map.get($tone, bg)};
+      --tone-fg: #{map.get($tone, fg)};
+    }
+  }
+}

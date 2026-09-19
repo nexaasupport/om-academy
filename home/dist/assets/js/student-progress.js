@@ -55,7 +55,7 @@ import"./modulepreload-polyfill.js";/* empty css      */import{b as Q,r as c,i a
     <div class="print-sheet">
       <div class="print-head">
         <div class="print-brand">
-          <span class="print-mark">OM</span>
+          <img class="print-mark" src="assets/img/logo-mark.svg" alt="">
           <div>
             <div class="print-org">${a.name}</div>
             ${a.address?d`<div class="print-org-sub">${a.address}</div>`:c("")}

@@ -14,7 +14,7 @@
   text-transform: uppercase;
   color: $primary-dark;
   background: $primary-tint;
-  border: 1px solid oklch(0.88 0.05 264);
+  border: 1px solid $border-strong;
   padding: 6px 14px;
   border-radius: $radius-pill;
   margin-bottom: 14px;
@@ -24,14 +24,14 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: $primary-gradient;
+    background: $primary-fill;
     flex-shrink: 0;
   }
 }
 
 .eyebrow-light {
-  background: oklch(1 0 0 / 0.1);
-  border-color: oklch(1 0 0 / 0.24);
+  background: rgb(255 255 255 / 0.1);
+  border-color: rgb(255 255 255 / 0.24);
   color: $white;
 
   &::before {

@@ -82,9 +82,14 @@ function chromeHtml({ portal, user, activePage }) {
       <div class="nav-backdrop" data-nav-backdrop hidden></div>
       <aside class="sidebar" id="sidebar" data-sidebar>
         <div class="sidebar-logo">
-          <a href="${brandHref}" class="brand-mark-link">
-            <span class="brand-mark">OM</span>
-            <span class="brand-text"><span class="brand-name">OM Academy</span><span class="brand-tag">${raw(portal === "student" ? "Student Portal" : "Staff Portal")}</span></span>
+          <a href="${brandHref}" class="brand-mark-link" aria-label="OM Academy ${portal === "student" ? "Student" : "Staff"} Portal">
+            <img class="brand-glyph glyph-light" src="assets/img/logo-mark.svg" alt="" width="36" height="36">
+            <img class="brand-glyph glyph-dark" src="assets/img/logo-mark-white.svg" alt="" width="36" height="36">
+            <span class="brand-text">
+              <img class="brand-logo brand-logo-light" src="assets/img/logo.svg" alt="OM Academy" width="300" height="92">
+              <img class="brand-logo brand-logo-dark" src="assets/img/logo-white.svg" alt="" width="300" height="92">
+              <span class="brand-tag">${raw(portal === "student" ? "Student Portal" : "Staff Portal")}</span>
+            </span>
           </a>
           <button type="button" class="sidebar-mini-toggle" data-mini-toggle aria-label="Collapse menu" title="Collapse / expand menu">${raw(icon("PanelLeftClose", { size: 16 }))}</button>
           <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">${raw(icon("X", { size: 18 }))}</button>

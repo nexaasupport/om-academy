@@ -20,7 +20,7 @@
 // Brand-blue band with a dot pattern (Courses)
 .section-brand {
   position: relative;
-  background: linear-gradient(160deg, oklch(0.36 0.13 265) 0%, oklch(0.27 0.1 265) 100%);
+  background: linear-gradient(160deg, var(--brand-deep) 0%, var(--navy) 100%);
   overflow: hidden;
 }
 
@@ -29,14 +29,6 @@
   position: relative;
   background: $primary-bg;
   overflow: hidden;
-}
-
-.dot-pattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.5;
-  background-image: radial-gradient(oklch(0.98 0.01 264 / 0.08) 1.5px, transparent 1.5px);
-  background-size: 22px 22px;
 }
 
 @include respond-below(sm) {

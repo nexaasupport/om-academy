@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    @@include('partials/title-meta.html', {"title": "Important Dates | OM Academy"})
+
+    @@include('partials/header.html', {"page": "important-dates"})
+
+</head>
+
+<body>
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Start Main Wrapper -->
+    <div class="main-wrapper">
+
+        @@include('partials/topbar.html', {"page": "important-dates", "sec": "index.html#"})
+
+        <main id="main" tabindex="-1">
+
+            <section class="page-hero">
+                <div class="page-hero-inner">
+                    <nav class="page-breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Important Dates</span></nav>
+                    <h1 class="page-hero-title">Important Dates</h1>
+                    <p class="page-hero-lead">Stay informed. Plan ahead. Never miss an important deadline.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="gallery-toolbar">
+                    <div role="group" aria-label="Filter dates" class="filter-tabs" data-dates-tabs></div>
+                </div>
+                <div class="dates-layout">
+                    <div class="dates-cal" data-dates-calendar></div>
+                    <div data-dates-list></div>
+                </div>
+                <ul class="dates-legend" aria-label="Legend"><li class="tone-green">Admissions</li><li class="tone-amber">Scholarship</li><li class="tone-blue">Exams</li><li class="tone-purple">Events</li><li class="tone-rust">Holidays</li></ul>
+            </section>
+
+            <!-- #enquire target: the enquiry form itself is the modal in partials/enquiry-modal.html -->
+            <div id="enquire"></div>
+
+        </main>
+
+        @@include('partials/footer.html', {"sec": "index.html#"})
+
+    </div>
+    <!-- End Main Wrapper -->
+
+    @@include('partials/enquiry-modal.html')
+
+    @@include('partials/announcement-modal.html', {"auto": "yes"})
+
+    @@include('partials/script.html', {"page": "important-dates"})
+
+</body>
+
+</html>

@@ -8,7 +8,7 @@
   transition: transform 0.25s, box-shadow 0.25s;
 
   &:hover {
-    transform: translateY(-6px);
+    transform: translateY(-2px);
     box-shadow: $shadow-card-hover;
   }
 }
@@ -32,7 +32,7 @@
 }
 
 .card-lift:hover .icon-tile {
-  transform: scale(1.08) rotate(-4deg);
+  transform: none;
 }
 
 // Grid layouts. Columns collapse at md (900px) and sm (640px).
