@@ -17,7 +17,7 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-card);
   transition: width 0.22s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s;
   overflow: hidden;
 }
@@ -125,7 +125,7 @@
 }
 
 .menu-title {
-  padding: 14px 10px 6px;
+  padding: 18px 10px 8px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -140,10 +140,14 @@
   gap: 10px;
   padding: 8px 10px;
   margin-bottom: 2px;
-  border-radius: 9px;
+  position: relative;
+  height: 42px;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 10px;
   color: var(--text);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
   transition: background 0.15s, color 0.15s;
 
@@ -159,8 +163,19 @@
   &.active {
     background: var(--primary-soft);
     color: var(--primary);
-    font-weight: 600;
-    box-shadow: inset 3px 0 0 var(--accent);
+    font-weight: 700;
+
+    // Indicator bar on the sidebar edge
+    &::before {
+      content: "";
+      position: absolute;
+      left: -12px;
+      top: 10px;
+      bottom: 10px;
+      width: 4px;
+      border-radius: 0 4px 4px 0;
+      background: var(--primary-fill);
+    }
 
     .nav-ico {
       color: var(--primary);

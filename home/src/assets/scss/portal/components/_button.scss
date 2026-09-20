@@ -7,16 +7,29 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: 38px;
-  padding: 0 14px;
-  border-radius: 9px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 11px;
   border: 1px solid transparent;
-  font: 600 13.5px var(--font-body);
+  font: 700 13.5px var(--font-body);
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s, transform 0.15s var(--ease-out);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+  }
 
   svg {
     flex-shrink: 0;
@@ -32,8 +45,10 @@
 .btn-primary {
   background: var(--primary-fill);
   color: var(--primary-contrast);
+  box-shadow: var(--shadow-sm), var(--btn-inset);
 
   &:hover:not(:disabled) {
+    box-shadow: 0 8px 20px -8px var(--primary-fill), var(--btn-inset);
     background: var(--primary-hover);
     color: var(--primary-contrast);
   }

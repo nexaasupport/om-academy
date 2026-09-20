@@ -6,9 +6,16 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 16px;
+  padding: 20px;
   height: 100%;
   min-width: 0;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s var(--ease-out);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .stat-card-link {
@@ -33,9 +40,9 @@
 }
 
 .stat-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
   background: var(--tone-bg, var(--primary-soft));
@@ -69,7 +76,8 @@
 }
 
 .stat-value {
-  font: 700 23px var(--font-title);
+  font: 800 28px var(--font-title);
+  letter-spacing: -0.03em;
   color: var(--title);
   margin: 0;
   font-variant-numeric: tabular-nums;

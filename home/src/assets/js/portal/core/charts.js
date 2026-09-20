@@ -45,12 +45,12 @@ function baseOptions(overrides = {}) {
     ...rest,
     // Marks charts given their own colours, so a theme toggle keeps them (read and removed in render()).
     __customColors: !!(colors && colors.length),
-    chart: { fontFamily: "Inter, sans-serif", toolbar: { show: false }, zoom: { enabled: false }, foreColor: p.text, animations: animationOptions(), ...chart },
+    chart: { fontFamily: "Manrope, sans-serif", toolbar: { show: false }, zoom: { enabled: false }, foreColor: p.text, animations: animationOptions(), ...chart },
     colors: colors && colors.length ? colors : p.series,
     grid: { borderColor: p.grid, strokeDashArray: 3, padding: { left: 8, right: 8 }, ...grid },
     dataLabels: { enabled: false, ...dataLabels },
     tooltip: { theme: currentTheme(), ...tooltip },
-    legend: { fontFamily: "Inter, sans-serif", labels: { colors: p.text }, ...legend },
+    legend: { fontFamily: "Manrope, sans-serif", labels: { colors: p.text }, ...legend },
   };
 }
 

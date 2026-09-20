@@ -35,7 +35,10 @@
 
   --focus-ring: color-mix(in srgb, #6366f1 45%, transparent);
   --overlay: rgb(11 16 32 / 0.55);
-  --shadow-sm: 0 1px 2px rgb(11 16 32 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(11 16 32 / 0.05);
+  --shadow-card: 0 1px 2px rgb(11 16 32 / 0.04);
+  --shadow-hover: 0 14px 30px -16px rgb(11 16 32 / 0.22);
+  --btn-inset: inset 0 1px 0 rgb(255 255 255 / 0.18);
   --shadow: 0 1px 2px rgb(11 16 32 / 0.05), 0 8px 22px -12px rgb(11 16 32 / 0.16);
   --shadow-lg: 0 2px 4px rgb(11 16 32 / 0.06), 0 22px 44px -20px rgb(11 16 32 / 0.3);
 
@@ -43,14 +46,14 @@
   --radius: 12px;
   --radius-lg: 16px;
 
-  --sidebar-w: 242px;
+  --sidebar-w: 260px;
   --sidebar-mini-w: 72px;
   --gutter: 12px;
-  --topbar-h: 60px;
+  --topbar-h: 64px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --font-title: "Poppins", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-title: "Manrope", system-ui, sans-serif;
+  --font-body: "Manrope", system-ui, sans-serif;
 
   color-scheme: light;
 }

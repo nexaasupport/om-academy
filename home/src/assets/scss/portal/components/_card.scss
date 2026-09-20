@@ -7,7 +7,14 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
   min-width: 0;
+  transition: box-shadow 0.2s, border-color 0.2s;
+
+  &:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-hover);
+  }
 }
 
 .card-header {
@@ -16,7 +23,7 @@
   justify-content: space-between;
   gap: 10px 12px;
   flex-wrap: wrap;
-  padding: 15px 18px;
+  padding: 18px 22px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -26,7 +33,8 @@
 }
 
 .card-title {
-  font: 700 15.5px var(--font-title);
+  font: 800 16px var(--font-title);
+  letter-spacing: -0.01em;
   color: var(--title);
   margin: 0;
 }
@@ -38,7 +46,7 @@
 }
 
 .card-body {
-  padding: 18px;
+  padding: 22px;
 }
 
 .card-body-flush {
